@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/WabbaTrackWeb.iml" filepath="$PROJECT_DIR$/.idea/modules/WabbaTrackWeb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/WabbaTrackWeb_main.iml" filepath="$PROJECT_DIR$/.idea/modules/WabbaTrackWeb_main.iml" group="WabbaTrackWeb" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/WabbaTrackWeb_test.iml" filepath="$PROJECT_DIR$/.idea/modules/WabbaTrackWeb_test.iml" group="WabbaTrackWeb" />
+    </modules>
+  </component>
+</project>
