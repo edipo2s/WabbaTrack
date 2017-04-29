@@ -284,28 +284,32 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
         addClass($receiver_2, ['mdl-data-table__cell--non-numeric']);
         var $receiver_3 = $receiver.createElement('img');
         addClass($receiver_3, ['wabbatrack-attr']);
-        $receiver_3.setAttribute('src', 'images/Attribute/' + element.attr1.name + '.png');
+        var $receiver_4 = element.attr1.name.toLowerCase();
+        $receiver_3.setAttribute('src', 'images/Attribute/' + ($receiver_4.length > 0 ? $receiver_4.substring(0, 1).toUpperCase() + $receiver_4.substring(1) : $receiver_4) + '.png');
         $receiver_2.appendChild($receiver_3);
         appendText($receiver_2, ' ');
-        var $receiver_4 = $receiver.createElement('img');
-        addClass($receiver_4, ['wabbatrack-attr']);
-        $receiver_4.setAttribute('src', 'images/Attribute/' + element.attr2.name + '.png');
-        $receiver_2.appendChild($receiver_4);
+        var $receiver_5 = $receiver.createElement('img');
+        addClass($receiver_5, ['wabbatrack-attr']);
+        var $receiver_6 = element.attr2.name.toLowerCase();
+        $receiver_5.setAttribute('src', 'images/Attribute/' + ($receiver_6.length > 0 ? $receiver_6.substring(0, 1).toUpperCase() + $receiver_6.substring(1) : $receiver_6) + '.png');
+        $receiver_2.appendChild($receiver_5);
         $receiver_1.appendChild($receiver_2);
         tmp$_0.appendChild($receiver_1);
       }
       if ((tmp$_1 = $receiver.getElementById('statistics-opponent-cls')) != null) {
-        var $receiver_5 = $receiver.createElement('th');
-        var $receiver_6 = $receiver.createElement('img');
-        addClass($receiver_6, ['wabbatrack-attr']);
-        $receiver_6.setAttribute('src', 'images/Attribute/' + element.attr1.name + '.png');
-        $receiver_5.appendChild($receiver_6);
-        appendText($receiver_5, ' ');
-        var $receiver_7 = $receiver.createElement('img');
-        addClass($receiver_7, ['wabbatrack-attr']);
-        $receiver_7.setAttribute('src', 'images/Attribute/' + element.attr2.name + '.png');
-        $receiver_5.appendChild($receiver_7);
-        tmp$_1.appendChild($receiver_5);
+        var $receiver_7 = $receiver.createElement('th');
+        var $receiver_8 = $receiver.createElement('img');
+        addClass($receiver_8, ['wabbatrack-attr']);
+        var $receiver_9 = element.attr1.name.toLowerCase();
+        $receiver_8.setAttribute('src', 'images/Attribute/' + ($receiver_9.length > 0 ? $receiver_9.substring(0, 1).toUpperCase() + $receiver_9.substring(1) : $receiver_9) + '.png');
+        $receiver_7.appendChild($receiver_8);
+        appendText($receiver_7, ' ');
+        var $receiver_10 = $receiver.createElement('img');
+        addClass($receiver_10, ['wabbatrack-attr']);
+        var $receiver_11 = element.attr2.name.toLowerCase();
+        $receiver_10.setAttribute('src', 'images/Attribute/' + ($receiver_11.length > 0 ? $receiver_11.substring(0, 1).toUpperCase() + $receiver_11.substring(1) : $receiver_11) + '.png');
+        $receiver_7.appendChild($receiver_10);
+        tmp$_1.appendChild($receiver_7);
       }
     }
   }

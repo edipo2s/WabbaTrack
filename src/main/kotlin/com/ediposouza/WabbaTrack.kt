@@ -93,12 +93,12 @@ private fun buildStatisticsTable() {
                             addClass("mdl-data-table__cell--non-numeric")
                             appendChild(createElement("img").apply {
                                 addClass("wabbatrack-attr")
-                                setAttribute("src", "images/Attribute/${cls.attr1.name}.png")
+                                setAttribute("src", "images/Attribute/${cls.attr1.name.toLowerCase().capitalize()}.png")
                             })
                             appendText(" ")
                             appendChild(createElement("img").apply {
                                 addClass("wabbatrack-attr")
-                                setAttribute("src", "images/Attribute/${cls.attr2.name}.png")
+                                setAttribute("src", "images/Attribute/${cls.attr2.name.toLowerCase().capitalize()}.png")
                             })
                         })
                     }
@@ -107,12 +107,12 @@ private fun buildStatisticsTable() {
                     createElement("th").apply {
                         appendChild(createElement("img").apply {
                             addClass("wabbatrack-attr")
-                            setAttribute("src", "images/Attribute/${cls.attr1.name}.png")
+                            setAttribute("src", "images/Attribute/${cls.attr1.name.toLowerCase().capitalize()}.png")
                         })
                         appendText(" ")
                         appendChild(createElement("img").apply {
                             addClass("wabbatrack-attr")
-                            setAttribute("src", "images/Attribute/${cls.attr2.name}.png")
+                            setAttribute("src", "images/Attribute/${cls.attr2.name.toLowerCase().capitalize()}.png")
                         })
                     }
             )
