@@ -5,7 +5,7 @@
       <configuration version="2" platform="JavaScript " useProjectSettings="false">
         <compilerSettings />
         <compilerArguments>
-          <option name="outputFile" value="$MODULE_DIR$/../../build/classes/main/WabbaTrackWeb_main.js" />
+          <option name="outputFile" value="C:\Users\Edipo\Documents\IdeaProjects\WabbaTrackWeb\build\classes\main\WabbaTrackWeb_main.js" />
           <option name="noStdlib" value="true" />
           <option name="metaInfo" value="true" />
           <option name="target" value="v5" />

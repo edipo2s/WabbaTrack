@@ -3,6 +3,7 @@ package com.ediposouza
 import com.ediposouza.data.Match
 import com.ediposouza.data.MatchMode
 import com.ediposouza.model.DeckClass
+import org.w3c.dom.HTMLLabelElement
 import org.w3c.dom.url.URL
 import org.w3c.fetch.RequestCredentials
 import org.w3c.fetch.RequestInit
@@ -11,15 +12,22 @@ import kotlin.browser.document
 import kotlin.browser.window
 import kotlin.dom.addClass
 import kotlin.dom.appendText
+import kotlin.dom.hasClass
 import kotlin.js.Json
 import kotlin.js.json
 
 var userID: String? = null
 var userMatches: Map<DeckClass, Map<DeckClass, List<Match>>>? = null
 var matchesMode: MatchMode = MatchMode.RANKED
+var matchesResultAsWinRate = false
 
 fun Main() {
     userID = URL(document.URL).searchParams.get("id")
+    val toogle_winrate = document.getElementById("statistics-winrate") as HTMLLabelElement
+    toogle_winrate.onchange = {
+        matchesResultAsWinRate = toogle_winrate.hasClass("is-checked")
+        showMatches()
+    }
     buildStatisticsTable()
     getUserMatches { matches ->
         userMatches = matches
@@ -50,10 +58,24 @@ private fun showMatches() {
     with(document) {
         DeckClass.values().forEach { playerCls ->
             getElementById("player${playerCls.name}")?.apply {
+                while (childElementCount > 1) {
+                    lastChild?.let {
+                        removeChild(it)
+                    }
+                }
                 DeckClass.values().forEach { opponentCls ->
                     appendChild(createElement("th").apply {
+                        setAttribute("style", "text-align: center;")
                         val vsMatches = userMatches?.get(playerCls)?.get(opponentCls)?.filter { it.mode == matchesMode }
-                        textContent = "${vsMatches?.count { it.win } ?: 0}/${vsMatches?.count { !it.win } ?: 0}"
+                        val wins = vsMatches?.count { it.win } ?: 0
+                        val loses = vsMatches?.count { !it.win } ?: 0
+                        val matches = wins + loses
+                        val winRate = 100 / matches * wins
+                        if (matchesResultAsWinRate) {
+                            textContent = "$winRate%".takeIf { matches > 0 } ?: "-"
+                        }else {
+                            textContent = "$wins/$loses".takeIf { matches > 0 } ?: "-"
+                        }
                     })
                 }
             }
