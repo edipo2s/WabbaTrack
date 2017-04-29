@@ -1,0 +1,9 @@
+# Gradle files
+.gradle/
+build/kotlin/build
+
+# Intellij
+*.iml
+.idea/*
+.idea/workspace.xml
+.idea/libraries
