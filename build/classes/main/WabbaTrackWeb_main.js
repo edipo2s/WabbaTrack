@@ -3,15 +3,18 @@ if (typeof kotlin === 'undefined') {
 }
 var WabbaTrackWeb_main = function (_, Kotlin) {
   'use strict';
-  var to = Kotlin.kotlin.to_ujzrz7$;
+  var addClass = Kotlin.kotlin.dom.addClass_hhb33f$;
+  var appendText = Kotlin.kotlin.dom.appendText_46n0ku$;
   var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
   var lazy = Kotlin.kotlin.lazy_klfg04$;
   var hasClass = Kotlin.kotlin.dom.hasClass_46n0ku$;
+  var to = Kotlin.kotlin.to_ujzrz7$;
   var json = Kotlin.kotlin.js.json_pyyo18$;
-  var addClass = Kotlin.kotlin.dom.addClass_hhb33f$;
-  var appendText = Kotlin.kotlin.dom.appendText_46n0ku$;
+  var toList = Kotlin.kotlin.collections.toList_us0mfu$;
   var Enum = Kotlin.kotlin.Enum;
   var replace = Kotlin.kotlin.text.replace_680rmw$;
+  var substringBefore = Kotlin.kotlin.text.substringBefore_j4ogox$;
+  var substringAfter = Kotlin.kotlin.text.substringAfter_j4ogox$;
   CardAttribute.prototype = Object.create(Enum.prototype);
   CardAttribute.prototype.constructor = CardAttribute;
   CardSet.prototype = Object.create(Enum.prototype);
@@ -38,15 +41,20 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   MatchMode.prototype.constructor = MatchMode;
   PatchType.prototype = Object.create(Enum.prototype);
   PatchType.prototype.constructor = PatchType;
-  function toPairs($receiver) {
-    var keys = Object.keys($receiver);
-    var destination = Kotlin.kotlin.collections.ArrayList_init_ww73n8$(keys.length);
-    var tmp$;
-    for (tmp$ = 0; tmp$ !== keys.length; ++tmp$) {
-      var item = keys[tmp$];
-      destination.add_11rb$(to(item, $receiver[item]));
-    }
-    return destination;
+  Month.prototype = Object.create(Enum.prototype);
+  Month.prototype.constructor = Month;
+  function addDeckClassIcons($receiver, cls) {
+    var $receiver_0 = document.createElement('img');
+    addClass($receiver_0, ['wt-attr']);
+    var $receiver_1 = cls.attr1.name.toLowerCase();
+    $receiver_0.setAttribute('src', 'images/Attribute/' + ($receiver_1.length > 0 ? $receiver_1.substring(0, 1).toUpperCase() + $receiver_1.substring(1) : $receiver_1) + '.png');
+    $receiver.appendChild($receiver_0);
+    appendText($receiver, ' ');
+    var $receiver_2 = document.createElement('img');
+    addClass($receiver_2, ['wt-attr']);
+    var $receiver_3 = cls.attr2.name.toLowerCase();
+    $receiver_2.setAttribute('src', 'images/Attribute/' + ($receiver_3.length > 0 ? $receiver_3.substring(0, 1).toUpperCase() + $receiver_3.substring(1) : $receiver_3) + '.png');
+    $receiver.appendChild($receiver_2);
   }
   function getString($receiver, key) {
     return Kotlin.toString($receiver[key]);
@@ -60,10 +68,12 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     else
       return false;
   }
+  var TESLEGENDS_DB_URL;
   var userID;
   var userMatches;
   var matchesMode;
   var matchesResultAsWinRate;
+  var currentSeason;
   function radio_ranked$lambda() {
     var tmp$;
     return Kotlin.isType(tmp$ = document.getElementById('statistics-ranked'), HTMLLabelElement) ? tmp$ : Kotlin.throwCCE();
@@ -99,6 +109,24 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   function get_toogle_winrate() {
     new Kotlin.PropertyMetadata('toogle_winrate');
     return toogle_winrate.value;
+  }
+  function dropdown_seasons$lambda() {
+    var tmp$;
+    return Kotlin.isType(tmp$ = document.getElementById('statistics-seasons'), HTMLUListElement) ? tmp$ : Kotlin.throwCCE();
+  }
+  var dropdown_seasons;
+  function get_dropdown_seasons() {
+    new Kotlin.PropertyMetadata('dropdown_seasons');
+    return dropdown_seasons.value;
+  }
+  function dropdown_seasons_label$lambda() {
+    var tmp$;
+    return Kotlin.isType(tmp$ = document.getElementById('statistics-seasons-label'), HTMLSpanElement) ? tmp$ : Kotlin.throwCCE();
+  }
+  var dropdown_seasons_label;
+  function get_dropdown_seasons_label() {
+    new Kotlin.PropertyMetadata('dropdown_seasons_label');
+    return dropdown_seasons_label.value;
   }
   function Main$lambda(matches) {
     var destination = Kotlin.kotlin.collections.LinkedHashMap_init_q3lmfv$();
@@ -152,11 +180,15 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     userMatches = destination_0;
     showMatches();
   }
+  function Main$lambda_0(seasons) {
+    buildSeasonFilter(seasons);
+  }
   function Main() {
     userID = (new URL(document.URL)).searchParams.get('id');
     buildStatisticsTable();
     configureListeners();
     getUserMatches(Main$lambda);
+    getSeasons(Main$lambda_0);
   }
   function configureListeners$lambda(it) {
     matchesMode = MatchMode$RANKED_getInstance();
@@ -235,7 +267,69 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     };
   }
   function getUserMatches(onSuccess) {
-    window.fetch('https://tes-legends-assistant.firebaseio.com/users/' + Kotlin.toString(userID) + '/matches.json', new getUserMatches$ObjectLiteral()).then(getUserMatches$lambda(onSuccess));
+    window.fetch(TESLEGENDS_DB_URL + '/users/' + Kotlin.toString(userID) + '/matches.json', new getUserMatches$ObjectLiteral()).then(getUserMatches$lambda(onSuccess));
+  }
+  function getSeasons$ObjectLiteral() {
+    this.method_fqr8x3$_0 = 'GET';
+    this.credentials_fqr8x3$_0 = 'same-origin';
+    this.headers_fqr8x3$_0 = json([to('Accept', 'application/json')]);
+  }
+  Object.defineProperty(getSeasons$ObjectLiteral.prototype, 'method', {
+    get: function () {
+      return this.method_fqr8x3$_0;
+    },
+    set: function (method) {
+      this.method_fqr8x3$_0 = method;
+    }
+  });
+  Object.defineProperty(getSeasons$ObjectLiteral.prototype, 'credentials', {
+    get: function () {
+      return this.credentials_fqr8x3$_0;
+    },
+    set: function (credentials) {
+      this.credentials_fqr8x3$_0 = credentials;
+    }
+  });
+  Object.defineProperty(getSeasons$ObjectLiteral.prototype, 'headers', {
+    get: function () {
+      return this.headers_fqr8x3$_0;
+    },
+    set: function (headers) {
+      this.headers_fqr8x3$_0 = headers;
+    }
+  });
+  getSeasons$ObjectLiteral.$metadata$ = {
+    kind: Kotlin.Kind.CLASS,
+    interfaces: []
+  };
+  function getSeasons$lambda$lambda$lambda(it) {
+    return it;
+  }
+  function getSeasons$lambda$lambda(closure$onSuccess) {
+    return function (json_0) {
+      var tmp$, tmp$_0;
+      tmp$_0 = Kotlin.isType(tmp$ = json_0, Object) ? tmp$ : Kotlin.throwCCE();
+      var keys = Object.keys(tmp$_0);
+      var tmp$_1 = closure$onSuccess;
+      var $receiver = toList(keys);
+      var $receiver_0 = Kotlin.kotlin.collections.sortedWith_eknfly$($receiver, new Kotlin.kotlin.comparisons.compareByDescending$f(getSeasons$lambda$lambda$lambda));
+      var destination = Kotlin.kotlin.collections.ArrayList_init_ww73n8$(Kotlin.kotlin.collections.collectionSizeOrDefault_ba2ldo$($receiver_0, 10));
+      var tmp$_2;
+      tmp$_2 = $receiver_0.iterator();
+      while (tmp$_2.hasNext()) {
+        var item = tmp$_2.next();
+        destination.add_11rb$(new Season(item));
+      }
+      tmp$_1(destination);
+    };
+  }
+  function getSeasons$lambda(closure$onSuccess) {
+    return function (response) {
+      return response.json().then(getSeasons$lambda$lambda(closure$onSuccess));
+    };
+  }
+  function getSeasons(onSuccess) {
+    window.fetch('https://tes-legends-assistant.firebaseio.com/seasons.json', new getSeasons$ObjectLiteral()).then(getSeasons$lambda(onSuccess));
   }
   function showMatches() {
     var $receiver = document;
@@ -256,65 +350,80 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
         for (tmp$_2 = 0; tmp$_2 !== $receiver_1.length; ++tmp$_2) {
           var element_0 = $receiver_1[tmp$_2];
           var $receiver_2 = $receiver.createElement('th');
-          var tmp$_3, tmp$_4, tmp$_5, tmp$_6, tmp$_7, tmp$_8;
+          var tmp$_3, tmp$_4, tmp$_5, tmp$_6, tmp$_7, tmp$_8, tmp$_9;
           $receiver_2.setAttribute('style', 'text-align: center;');
-          var tmp$_9;
+          var tmp$_10;
           if ((tmp$_4 = (tmp$_3 = userMatches != null ? userMatches.get_11rb$(element) : null) != null ? tmp$_3.get_11rb$(element_0) : null) != null) {
             var destination = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
-            var tmp$_10;
-            tmp$_10 = tmp$_4.iterator();
-            while (tmp$_10.hasNext()) {
-              var element_1 = tmp$_10.next();
+            var tmp$_11;
+            tmp$_11 = tmp$_4.iterator();
+            while (tmp$_11.hasNext()) {
+              var element_1 = tmp$_11.next();
               if (element_1.mode === matchesMode) {
                 destination.add_11rb$(element_1);
               }
             }
-            tmp$_9 = destination;
+            tmp$_10 = destination;
           }
            else
-            tmp$_9 = null;
-          var vsMatches = tmp$_9;
-          var tmp$_11;
+            tmp$_10 = null;
+          var tmp$_12;
+          if ((tmp$_5 = tmp$_10) != null) {
+            var destination_0 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
+            var tmp$_13;
+            tmp$_13 = tmp$_5.iterator();
+            while (tmp$_13.hasNext()) {
+              var element_2 = tmp$_13.next();
+              if (currentSeason == null || Kotlin.equals(element_2.season, currentSeason != null ? currentSeason.id : null)) {
+                destination_0.add_11rb$(element_2);
+              }
+            }
+            tmp$_12 = destination_0;
+          }
+           else
+            tmp$_12 = null;
+          var vsMatches = tmp$_12;
+          var tmp$_14;
           if (vsMatches != null) {
-            var tmp$_12;
+            var tmp$_15;
             var count_26 = 0;
-            tmp$_12 = vsMatches.iterator();
-            while (tmp$_12.hasNext()) {
-              var element_2 = tmp$_12.next();
-              if (element_2.win) {
+            tmp$_15 = vsMatches.iterator();
+            while (tmp$_15.hasNext()) {
+              var element_3 = tmp$_15.next();
+              if (element_3.win) {
                 count_26 = count_26 + 1 | 0;
               }
             }
-            tmp$_11 = count_26;
+            tmp$_14 = count_26;
           }
            else
-            tmp$_11 = null;
-          var wins = (tmp$_5 = tmp$_11) != null ? tmp$_5 : 0;
-          var tmp$_13;
+            tmp$_14 = null;
+          var wins = (tmp$_6 = tmp$_14) != null ? tmp$_6 : 0;
+          var tmp$_16;
           if (vsMatches != null) {
-            var tmp$_14;
+            var tmp$_17;
             var count_27 = 0;
-            tmp$_14 = vsMatches.iterator();
-            while (tmp$_14.hasNext()) {
-              var element_3 = tmp$_14.next();
-              if (!element_3.win) {
+            tmp$_17 = vsMatches.iterator();
+            while (tmp$_17.hasNext()) {
+              var element_4 = tmp$_17.next();
+              if (!element_4.win) {
                 count_27 = count_27 + 1 | 0;
               }
             }
-            tmp$_13 = count_27;
+            tmp$_16 = count_27;
           }
            else
-            tmp$_13 = null;
-          var loses = (tmp$_6 = tmp$_13) != null ? tmp$_6 : 0;
+            tmp$_16 = null;
+          var loses = (tmp$_7 = tmp$_16) != null ? tmp$_7 : 0;
           var matches = wins + loses | 0;
           var winRate = Kotlin.imul(100 / matches | 0, wins);
           if (matchesResultAsWinRate) {
             var $receiver_3 = winRate.toString() + '%';
-            $receiver_2.textContent = (tmp$_7 = matches > 0 ? $receiver_3 : null) != null ? tmp$_7 : '-';
+            $receiver_2.textContent = (tmp$_8 = matches > 0 ? $receiver_3 : null) != null ? tmp$_8 : '-';
           }
            else {
             var $receiver_4 = wins.toString() + '/' + loses;
-            $receiver_2.textContent = (tmp$_8 = matches > 0 ? $receiver_4 : null) != null ? tmp$_8 : '-';
+            $receiver_2.textContent = (tmp$_9 = matches > 0 ? $receiver_4 : null) != null ? tmp$_9 : '-';
           }
           tmp$_0.appendChild($receiver_2);
         }
@@ -333,36 +442,46 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
         $receiver_1.id = 'player' + element.name;
         var $receiver_2 = $receiver.createElement('td');
         addClass($receiver_2, ['mdl-data-table__cell--non-numeric']);
-        var $receiver_3 = $receiver.createElement('img');
-        addClass($receiver_3, ['wt-attr']);
-        var $receiver_4 = element.attr1.name.toLowerCase();
-        $receiver_3.setAttribute('src', 'images/Attribute/' + ($receiver_4.length > 0 ? $receiver_4.substring(0, 1).toUpperCase() + $receiver_4.substring(1) : $receiver_4) + '.png');
-        $receiver_2.appendChild($receiver_3);
-        appendText($receiver_2, ' ');
-        var $receiver_5 = $receiver.createElement('img');
-        addClass($receiver_5, ['wt-attr']);
-        var $receiver_6 = element.attr2.name.toLowerCase();
-        $receiver_5.setAttribute('src', 'images/Attribute/' + ($receiver_6.length > 0 ? $receiver_6.substring(0, 1).toUpperCase() + $receiver_6.substring(1) : $receiver_6) + '.png');
-        $receiver_2.appendChild($receiver_5);
+        addDeckClassIcons($receiver_2, element);
         $receiver_1.appendChild($receiver_2);
         tmp$_0.appendChild($receiver_1);
       }
       if ((tmp$_1 = $receiver.getElementById('statistics-opponent-cls')) != null) {
-        var $receiver_7 = $receiver.createElement('th');
-        var $receiver_8 = $receiver.createElement('img');
-        addClass($receiver_8, ['wt-attr']);
-        var $receiver_9 = element.attr1.name.toLowerCase();
-        $receiver_8.setAttribute('src', 'images/Attribute/' + ($receiver_9.length > 0 ? $receiver_9.substring(0, 1).toUpperCase() + $receiver_9.substring(1) : $receiver_9) + '.png');
-        $receiver_7.appendChild($receiver_8);
-        appendText($receiver_7, ' ');
-        var $receiver_10 = $receiver.createElement('img');
-        addClass($receiver_10, ['wt-attr']);
-        var $receiver_11 = element.attr2.name.toLowerCase();
-        $receiver_10.setAttribute('src', 'images/Attribute/' + ($receiver_11.length > 0 ? $receiver_11.substring(0, 1).toUpperCase() + $receiver_11.substring(1) : $receiver_11) + '.png');
-        $receiver_7.appendChild($receiver_10);
-        tmp$_1.appendChild($receiver_7);
+        var $receiver_3 = $receiver.createElement('th');
+        addDeckClassIcons($receiver_3, element);
+        tmp$_1.appendChild($receiver_3);
       }
     }
+  }
+  function buildSeasonFilter(seasons) {
+    get_dropdown_seasons().appendChild(createSeasonItem(null));
+    var tmp$;
+    tmp$ = seasons.iterator();
+    while (tmp$.hasNext()) {
+      var element = tmp$.next();
+      get_dropdown_seasons().appendChild(createSeasonItem(element));
+    }
+  }
+  function createSeasonItem$lambda$lambda(closure$season, this$) {
+    return function (it) {
+      currentSeason = closure$season;
+      get_dropdown_seasons_label().textContent = this$.textContent;
+      $('.mdl-menu__container').removeClass('is-visible');
+      showMatches();
+    };
+  }
+  function createSeasonItem(season) {
+    var tmp$;
+    var $receiver = Kotlin.isType(tmp$ = document.createElement('li'), HTMLElement) ? tmp$ : Kotlin.throwCCE();
+    var tmp$_0;
+    addClass($receiver, ['mdl-menu__item mdl-js-ripple-effect']);
+    $receiver.textContent = (tmp$_0 = season != null ? season.year + ' ' + season.month : null) != null ? tmp$_0 : 'All Seasons';
+    $receiver.onclick = createSeasonItem$lambda$lambda(season, $receiver);
+    var $receiver_0 = document.createElement('span');
+    addClass($receiver_0, ['mdl-ripple']);
+    $receiver.appendChild($receiver_0);
+    componentHandler.upgradeElement($receiver);
+    return $receiver;
   }
   function CardAttribute(name, ordinal) {
     Enum.call(this);
@@ -2825,12 +2944,190 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   Patch.prototype.equals = function (other) {
     return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.uuidDate, other.uuidDate) && Kotlin.equals(this.date, other.date) && Kotlin.equals(this.desc, other.desc) && Kotlin.equals(this.legendsDeck, other.legendsDeck) && Kotlin.equals(this.type, other.type) && Kotlin.equals(this.changes, other.changes)))));
   };
+  function Month(name, ordinal) {
+    Enum.call(this);
+    this.name$ = name;
+    this.ordinal$ = ordinal;
+  }
+  function Month_initFields() {
+    Month_initFields = function () {
+    };
+    Month$JANUARY_instance = new Month('JANUARY', 0);
+    Month$FEBRUARY_instance = new Month('FEBRUARY', 1);
+    Month$MARCH_instance = new Month('MARCH', 2);
+    Month$APRIL_instance = new Month('APRIL', 3);
+    Month$MAY_instance = new Month('MAY', 4);
+    Month$JUNE_instance = new Month('JUNE', 5);
+    Month$JULY_instance = new Month('JULY', 6);
+    Month$AUGUST_instance = new Month('AUGUST', 7);
+    Month$SEPTEMBER_instance = new Month('SEPTEMBER', 8);
+    Month$OCTOBER_instance = new Month('OCTOBER', 9);
+    Month$NOVEMBER_instance = new Month('NOVEMBER', 10);
+    Month$DECEMBER_instance = new Month('DECEMBER', 11);
+  }
+  var Month$JANUARY_instance;
+  function Month$JANUARY_getInstance() {
+    Month_initFields();
+    return Month$JANUARY_instance;
+  }
+  var Month$FEBRUARY_instance;
+  function Month$FEBRUARY_getInstance() {
+    Month_initFields();
+    return Month$FEBRUARY_instance;
+  }
+  var Month$MARCH_instance;
+  function Month$MARCH_getInstance() {
+    Month_initFields();
+    return Month$MARCH_instance;
+  }
+  var Month$APRIL_instance;
+  function Month$APRIL_getInstance() {
+    Month_initFields();
+    return Month$APRIL_instance;
+  }
+  var Month$MAY_instance;
+  function Month$MAY_getInstance() {
+    Month_initFields();
+    return Month$MAY_instance;
+  }
+  var Month$JUNE_instance;
+  function Month$JUNE_getInstance() {
+    Month_initFields();
+    return Month$JUNE_instance;
+  }
+  var Month$JULY_instance;
+  function Month$JULY_getInstance() {
+    Month_initFields();
+    return Month$JULY_instance;
+  }
+  var Month$AUGUST_instance;
+  function Month$AUGUST_getInstance() {
+    Month_initFields();
+    return Month$AUGUST_instance;
+  }
+  var Month$SEPTEMBER_instance;
+  function Month$SEPTEMBER_getInstance() {
+    Month_initFields();
+    return Month$SEPTEMBER_instance;
+  }
+  var Month$OCTOBER_instance;
+  function Month$OCTOBER_getInstance() {
+    Month_initFields();
+    return Month$OCTOBER_instance;
+  }
+  var Month$NOVEMBER_instance;
+  function Month$NOVEMBER_getInstance() {
+    Month_initFields();
+    return Month$NOVEMBER_instance;
+  }
+  var Month$DECEMBER_instance;
+  function Month$DECEMBER_getInstance() {
+    Month_initFields();
+    return Month$DECEMBER_instance;
+  }
+  Month.$metadata$ = {
+    kind: Kotlin.Kind.CLASS,
+    simpleName: 'Month',
+    interfaces: [Enum]
+  };
+  function Month$values() {
+    return [Month$JANUARY_getInstance(), Month$FEBRUARY_getInstance(), Month$MARCH_getInstance(), Month$APRIL_getInstance(), Month$MAY_getInstance(), Month$JUNE_getInstance(), Month$JULY_getInstance(), Month$AUGUST_getInstance(), Month$SEPTEMBER_getInstance(), Month$OCTOBER_getInstance(), Month$NOVEMBER_getInstance(), Month$DECEMBER_getInstance()];
+  }
+  Month.values = Month$values;
+  function Month$valueOf(name) {
+    switch (name) {
+      case 'JANUARY':
+        return Month$JANUARY_getInstance();
+      case 'FEBRUARY':
+        return Month$FEBRUARY_getInstance();
+      case 'MARCH':
+        return Month$MARCH_getInstance();
+      case 'APRIL':
+        return Month$APRIL_getInstance();
+      case 'MAY':
+        return Month$MAY_getInstance();
+      case 'JUNE':
+        return Month$JUNE_getInstance();
+      case 'JULY':
+        return Month$JULY_getInstance();
+      case 'AUGUST':
+        return Month$AUGUST_getInstance();
+      case 'SEPTEMBER':
+        return Month$SEPTEMBER_getInstance();
+      case 'OCTOBER':
+        return Month$OCTOBER_getInstance();
+      case 'NOVEMBER':
+        return Month$NOVEMBER_getInstance();
+      case 'DECEMBER':
+        return Month$DECEMBER_getInstance();
+      default:Kotlin.throwISE('No enum constant com.ediposouza.data.Month.' + name);
+    }
+  }
+  Month.valueOf_61zpoe$ = Month$valueOf;
+  function Season(id) {
+    this.id = id;
+    this.year$delegate = lazy(Season$year$lambda(this));
+    this.month$delegate = lazy(Season$month$lambda(this));
+  }
+  Object.defineProperty(Season.prototype, 'year', {
+    get: function () {
+      var $receiver = this.year$delegate;
+      new Kotlin.PropertyMetadata('year');
+      return $receiver.value;
+    }
+  });
+  Object.defineProperty(Season.prototype, 'month', {
+    get: function () {
+      var $receiver = this.month$delegate;
+      new Kotlin.PropertyMetadata('month');
+      return $receiver.value;
+    }
+  });
+  function Season$year$lambda(this$Season) {
+    return function () {
+      return substringBefore(this$Season.id, '_');
+    };
+  }
+  function Season$month$lambda(this$Season) {
+    return function () {
+      var monthIndex = toInt(substringAfter(this$Season.id, '_')) - 1 | 0;
+      var $receiver = Month$values()[monthIndex].name.toLowerCase();
+      return $receiver.length > 0 ? $receiver.substring(0, 1).toUpperCase() + $receiver.substring(1) : $receiver;
+    };
+  }
+  Season.$metadata$ = {
+    kind: Kotlin.Kind.CLASS,
+    simpleName: 'Season',
+    interfaces: []
+  };
+  Season.prototype.component1 = function () {
+    return this.id;
+  };
+  Season.prototype.copy_61zpoe$ = function (id) {
+    return new Season(id === void 0 ? this.id : id);
+  };
+  Season.prototype.toString = function () {
+    return 'Season(id=' + Kotlin.toString(this.id) + ')';
+  };
+  Season.prototype.hashCode = function () {
+    var result = 0;
+    result = result * 31 + Kotlin.hashCode(this.id) | 0;
+    return result;
+  };
+  Season.prototype.equals = function (other) {
+    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && Kotlin.equals(this.id, other.id))));
+  };
   var package$com = _.com || (_.com = {});
   var package$ediposouza = package$com.ediposouza || (package$com.ediposouza = {});
-  package$ediposouza.toPairs_t1yf75$ = toPairs;
+  package$ediposouza.addDeckClassIcons_ut8980$ = addDeckClassIcons;
   package$ediposouza.getString_fxvzox$ = getString;
   package$ediposouza.getInt_fxvzox$ = getInt;
   package$ediposouza.getBoolean_fxvzox$ = getBoolean;
+  Object.defineProperty(package$ediposouza, 'TESLEGENDS_DB_URL', {
+    get: function () {
+      return TESLEGENDS_DB_URL;
+    }
+  });
   Object.defineProperty(package$ediposouza, 'userID', {
     get: function () {
       return userID;
@@ -2863,6 +3160,14 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
       matchesResultAsWinRate = value;
     }
   });
+  Object.defineProperty(package$ediposouza, 'currentSeason', {
+    get: function () {
+      return currentSeason;
+    },
+    set: function (value) {
+      currentSeason = value;
+    }
+  });
   Object.defineProperty(package$ediposouza, 'radio_ranked', {
     get: get_radio_ranked
   });
@@ -2875,7 +3180,14 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   Object.defineProperty(package$ediposouza, 'toogle_winrate', {
     get: get_toogle_winrate
   });
+  Object.defineProperty(package$ediposouza, 'dropdown_seasons', {
+    get: get_dropdown_seasons
+  });
+  Object.defineProperty(package$ediposouza, 'dropdown_seasons_label', {
+    get: get_dropdown_seasons_label
+  });
   package$ediposouza.Main = Main;
+  package$ediposouza.buildSeasonFilter_gu2hle$ = buildSeasonFilter;
   Object.defineProperty(CardAttribute, 'STRENGTH', {
     get: CardAttribute$STRENGTH_getInstance
   });
@@ -3358,14 +3670,56 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   package$data.PatchType = PatchType;
   package$data.PatchChange = PatchChange;
   package$data.Patch = Patch;
+  Object.defineProperty(Month, 'JANUARY', {
+    get: Month$JANUARY_getInstance
+  });
+  Object.defineProperty(Month, 'FEBRUARY', {
+    get: Month$FEBRUARY_getInstance
+  });
+  Object.defineProperty(Month, 'MARCH', {
+    get: Month$MARCH_getInstance
+  });
+  Object.defineProperty(Month, 'APRIL', {
+    get: Month$APRIL_getInstance
+  });
+  Object.defineProperty(Month, 'MAY', {
+    get: Month$MAY_getInstance
+  });
+  Object.defineProperty(Month, 'JUNE', {
+    get: Month$JUNE_getInstance
+  });
+  Object.defineProperty(Month, 'JULY', {
+    get: Month$JULY_getInstance
+  });
+  Object.defineProperty(Month, 'AUGUST', {
+    get: Month$AUGUST_getInstance
+  });
+  Object.defineProperty(Month, 'SEPTEMBER', {
+    get: Month$SEPTEMBER_getInstance
+  });
+  Object.defineProperty(Month, 'OCTOBER', {
+    get: Month$OCTOBER_getInstance
+  });
+  Object.defineProperty(Month, 'NOVEMBER', {
+    get: Month$NOVEMBER_getInstance
+  });
+  Object.defineProperty(Month, 'DECEMBER', {
+    get: Month$DECEMBER_getInstance
+  });
+  package$data.Month = Month;
+  package$data.Season = Season;
+  TESLEGENDS_DB_URL = 'https://tes-legends-assistant.firebaseio.com';
   userID = null;
   userMatches = null;
   matchesMode = MatchMode$RANKED_getInstance();
   matchesResultAsWinRate = false;
+  currentSeason = null;
   radio_ranked = lazy(radio_ranked$lambda);
   radio_casual = lazy(radio_casual$lambda);
   radio_arena = lazy(radio_arena$lambda);
   toogle_winrate = lazy(toogle_winrate$lambda);
+  dropdown_seasons = lazy(dropdown_seasons$lambda);
+  dropdown_seasons_label = lazy(dropdown_seasons_label$lambda);
   Kotlin.defineModule('WabbaTrackWeb_main', _);
   return _;
 }(typeof WabbaTrackWeb_main === 'undefined' ? {} : WabbaTrackWeb_main, kotlin);

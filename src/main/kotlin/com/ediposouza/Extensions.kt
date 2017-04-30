@@ -1,15 +1,25 @@
 package com.ediposouza
 
+import com.ediposouza.model.DeckClass
+import org.w3c.dom.Element
+import kotlin.browser.document
+import kotlin.dom.addClass
+import kotlin.dom.appendText
 import kotlin.js.Json
 
 /**
  * Created by ediposouza on 28/04/17.
  */
-
-@Suppress("UnsafeCastFromDynamic")
-fun Json.toPairs(): List<Pair<String, Any?>> {
-    val keys: Array<String> = js("Object").keys(this)
-    return keys.map { it to get(it) }
+fun Element.addDeckClassIcons(cls: DeckClass) {
+    appendChild(document.createElement("img").apply {
+        addClass("wt-attr")
+        setAttribute("src", "images/Attribute/${cls.attr1.name.toLowerCase().capitalize()}.png")
+    })
+    appendText(" ")
+    appendChild(document.createElement("img").apply {
+        addClass("wt-attr")
+        setAttribute("src", "images/Attribute/${cls.attr2.name.toLowerCase().capitalize()}.png")
+    })
 }
 
 fun Json.getString(key: String) = get(key).toString()

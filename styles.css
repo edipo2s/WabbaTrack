@@ -44,8 +44,10 @@ html, body {
     max-width: 1600px;
     width: calc(100% - 16px);
     margin: 0 auto;
+    padding-top: 0px;
 }
 .wt-statistics-mode {
+    margin-top: 3px;
     margin-right: 4%;
     color: white;
 }
@@ -58,10 +60,16 @@ html, body {
 .wt-statistics-mode .mdl-radio .mdl-radio__inner-circle {
     background: rgb(0,188,212);
 }
-.wt-winrate {
+.wt-statistics-winrate {
     max-width: 100px;
+    margin-top: 3px;
     margin-right: 5%;
     color: white;
+}
+.wt-statistics-dropdown {
+    color: white;
+    margin-bottom: 5px;
+    margin-right: 5%;
 }
 .wt-table {
     margin: 0 auto;
