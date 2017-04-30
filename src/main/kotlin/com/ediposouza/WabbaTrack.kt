@@ -21,20 +21,40 @@ var userMatches: Map<DeckClass, Map<DeckClass, List<Match>>>? = null
 var matchesMode: MatchMode = MatchMode.RANKED
 var matchesResultAsWinRate = false
 
+val radio_ranked by lazy { document.getElementById("statistics-ranked") as HTMLLabelElement }
+val radio_casual by lazy { document.getElementById("statistics-casual") as HTMLLabelElement }
+val radio_arena by lazy { document.getElementById("statistics-arena") as HTMLLabelElement }
+val toogle_winrate by lazy { document.getElementById("statistics-winrate") as HTMLLabelElement }
+
 fun Main() {
     userID = URL(document.URL).searchParams.get("id")
-    val toogle_winrate = document.getElementById("statistics-winrate") as HTMLLabelElement
-    toogle_winrate.onchange = {
-        matchesResultAsWinRate = toogle_winrate.hasClass("is-checked")
-        showMatches()
-    }
     buildStatisticsTable()
+    configureListeners()
     getUserMatches { matches ->
         userMatches = matches
                 .groupBy { it.player.cls }
                 .mapValues {
                     it.value.groupBy { it.opponent.cls }
                 }
+        showMatches()
+    }
+}
+
+private fun configureListeners() {
+    radio_ranked.onchange = {
+        matchesMode = MatchMode.RANKED
+        showMatches()
+    }
+    radio_casual.onchange = {
+        matchesMode = MatchMode.CASUAL
+        showMatches()
+    }
+    radio_arena.onchange = {
+        matchesMode = MatchMode.ARENA
+        showMatches()
+    }
+    toogle_winrate.onchange = {
+        matchesResultAsWinRate = toogle_winrate.hasClass("is-checked")
         showMatches()
     }
 }
@@ -92,12 +112,12 @@ private fun buildStatisticsTable() {
                         appendChild(createElement("td").apply {
                             addClass("mdl-data-table__cell--non-numeric")
                             appendChild(createElement("img").apply {
-                                addClass("wabbatrack-attr")
+                                addClass("wt-attr")
                                 setAttribute("src", "images/Attribute/${cls.attr1.name.toLowerCase().capitalize()}.png")
                             })
                             appendText(" ")
                             appendChild(createElement("img").apply {
-                                addClass("wabbatrack-attr")
+                                addClass("wt-attr")
                                 setAttribute("src", "images/Attribute/${cls.attr2.name.toLowerCase().capitalize()}.png")
                             })
                         })
@@ -106,12 +126,12 @@ private fun buildStatisticsTable() {
             getElementById("statistics-opponent-cls")?.appendChild(
                     createElement("th").apply {
                         appendChild(createElement("img").apply {
-                            addClass("wabbatrack-attr")
+                            addClass("wt-attr")
                             setAttribute("src", "images/Attribute/${cls.attr1.name.toLowerCase().capitalize()}.png")
                         })
                         appendText(" ")
                         appendChild(createElement("img").apply {
-                            addClass("wabbatrack-attr")
+                            addClass("wt-attr")
                             setAttribute("src", "images/Attribute/${cls.attr2.name.toLowerCase().capitalize()}.png")
                         })
                     }

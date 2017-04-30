@@ -5,6 +5,7 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   'use strict';
   var to = Kotlin.kotlin.to_ujzrz7$;
   var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
+  var lazy = Kotlin.kotlin.lazy_klfg04$;
   var hasClass = Kotlin.kotlin.dom.hasClass_46n0ku$;
   var json = Kotlin.kotlin.js.json_pyyo18$;
   var addClass = Kotlin.kotlin.dom.addClass_hhb33f$;
@@ -63,13 +64,43 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   var userMatches;
   var matchesMode;
   var matchesResultAsWinRate;
-  function Main$lambda(closure$toogle_winrate) {
-    return function (it) {
-      matchesResultAsWinRate = hasClass(closure$toogle_winrate, 'is-checked');
-      showMatches();
-    };
+  function radio_ranked$lambda() {
+    var tmp$;
+    return Kotlin.isType(tmp$ = document.getElementById('statistics-ranked'), HTMLLabelElement) ? tmp$ : Kotlin.throwCCE();
   }
-  function Main$lambda_0(matches) {
+  var radio_ranked;
+  function get_radio_ranked() {
+    new Kotlin.PropertyMetadata('radio_ranked');
+    return radio_ranked.value;
+  }
+  function radio_casual$lambda() {
+    var tmp$;
+    return Kotlin.isType(tmp$ = document.getElementById('statistics-casual'), HTMLLabelElement) ? tmp$ : Kotlin.throwCCE();
+  }
+  var radio_casual;
+  function get_radio_casual() {
+    new Kotlin.PropertyMetadata('radio_casual');
+    return radio_casual.value;
+  }
+  function radio_arena$lambda() {
+    var tmp$;
+    return Kotlin.isType(tmp$ = document.getElementById('statistics-arena'), HTMLLabelElement) ? tmp$ : Kotlin.throwCCE();
+  }
+  var radio_arena;
+  function get_radio_arena() {
+    new Kotlin.PropertyMetadata('radio_arena');
+    return radio_arena.value;
+  }
+  function toogle_winrate$lambda() {
+    var tmp$;
+    return Kotlin.isType(tmp$ = document.getElementById('statistics-winrate'), HTMLLabelElement) ? tmp$ : Kotlin.throwCCE();
+  }
+  var toogle_winrate;
+  function get_toogle_winrate() {
+    new Kotlin.PropertyMetadata('toogle_winrate');
+    return toogle_winrate.value;
+  }
+  function Main$lambda(matches) {
     var destination = Kotlin.kotlin.collections.LinkedHashMap_init_q3lmfv$();
     var tmp$;
     tmp$ = matches.iterator();
@@ -122,12 +153,32 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     showMatches();
   }
   function Main() {
-    var tmp$;
     userID = (new URL(document.URL)).searchParams.get('id');
-    var toogle_winrate = Kotlin.isType(tmp$ = document.getElementById('statistics-winrate'), HTMLLabelElement) ? tmp$ : Kotlin.throwCCE();
-    toogle_winrate.onchange = Main$lambda(toogle_winrate);
     buildStatisticsTable();
-    getUserMatches(Main$lambda_0);
+    configureListeners();
+    getUserMatches(Main$lambda);
+  }
+  function configureListeners$lambda(it) {
+    matchesMode = MatchMode$RANKED_getInstance();
+    showMatches();
+  }
+  function configureListeners$lambda_0(it) {
+    matchesMode = MatchMode$CASUAL_getInstance();
+    showMatches();
+  }
+  function configureListeners$lambda_1(it) {
+    matchesMode = MatchMode$ARENA_getInstance();
+    showMatches();
+  }
+  function configureListeners$lambda_2(it) {
+    matchesResultAsWinRate = hasClass(get_toogle_winrate(), 'is-checked');
+    showMatches();
+  }
+  function configureListeners() {
+    get_radio_ranked().onchange = configureListeners$lambda;
+    get_radio_casual().onchange = configureListeners$lambda_0;
+    get_radio_arena().onchange = configureListeners$lambda_1;
+    get_toogle_winrate().onchange = configureListeners$lambda_2;
   }
   function getUserMatches$ObjectLiteral() {
     this.method_5kbz6n$_0 = 'GET';
@@ -283,13 +334,13 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
         var $receiver_2 = $receiver.createElement('td');
         addClass($receiver_2, ['mdl-data-table__cell--non-numeric']);
         var $receiver_3 = $receiver.createElement('img');
-        addClass($receiver_3, ['wabbatrack-attr']);
+        addClass($receiver_3, ['wt-attr']);
         var $receiver_4 = element.attr1.name.toLowerCase();
         $receiver_3.setAttribute('src', 'images/Attribute/' + ($receiver_4.length > 0 ? $receiver_4.substring(0, 1).toUpperCase() + $receiver_4.substring(1) : $receiver_4) + '.png');
         $receiver_2.appendChild($receiver_3);
         appendText($receiver_2, ' ');
         var $receiver_5 = $receiver.createElement('img');
-        addClass($receiver_5, ['wabbatrack-attr']);
+        addClass($receiver_5, ['wt-attr']);
         var $receiver_6 = element.attr2.name.toLowerCase();
         $receiver_5.setAttribute('src', 'images/Attribute/' + ($receiver_6.length > 0 ? $receiver_6.substring(0, 1).toUpperCase() + $receiver_6.substring(1) : $receiver_6) + '.png');
         $receiver_2.appendChild($receiver_5);
@@ -299,13 +350,13 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
       if ((tmp$_1 = $receiver.getElementById('statistics-opponent-cls')) != null) {
         var $receiver_7 = $receiver.createElement('th');
         var $receiver_8 = $receiver.createElement('img');
-        addClass($receiver_8, ['wabbatrack-attr']);
+        addClass($receiver_8, ['wt-attr']);
         var $receiver_9 = element.attr1.name.toLowerCase();
         $receiver_8.setAttribute('src', 'images/Attribute/' + ($receiver_9.length > 0 ? $receiver_9.substring(0, 1).toUpperCase() + $receiver_9.substring(1) : $receiver_9) + '.png');
         $receiver_7.appendChild($receiver_8);
         appendText($receiver_7, ' ');
         var $receiver_10 = $receiver.createElement('img');
-        addClass($receiver_10, ['wabbatrack-attr']);
+        addClass($receiver_10, ['wt-attr']);
         var $receiver_11 = element.attr2.name.toLowerCase();
         $receiver_10.setAttribute('src', 'images/Attribute/' + ($receiver_11.length > 0 ? $receiver_11.substring(0, 1).toUpperCase() + $receiver_11.substring(1) : $receiver_11) + '.png');
         $receiver_7.appendChild($receiver_10);
@@ -2812,6 +2863,18 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
       matchesResultAsWinRate = value;
     }
   });
+  Object.defineProperty(package$ediposouza, 'radio_ranked', {
+    get: get_radio_ranked
+  });
+  Object.defineProperty(package$ediposouza, 'radio_casual', {
+    get: get_radio_casual
+  });
+  Object.defineProperty(package$ediposouza, 'radio_arena', {
+    get: get_radio_arena
+  });
+  Object.defineProperty(package$ediposouza, 'toogle_winrate', {
+    get: get_toogle_winrate
+  });
   package$ediposouza.Main = Main;
   Object.defineProperty(CardAttribute, 'STRENGTH', {
     get: CardAttribute$STRENGTH_getInstance
@@ -3299,6 +3362,10 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   userMatches = null;
   matchesMode = MatchMode$RANKED_getInstance();
   matchesResultAsWinRate = false;
+  radio_ranked = lazy(radio_ranked$lambda);
+  radio_casual = lazy(radio_casual$lambda);
+  radio_arena = lazy(radio_arena$lambda);
+  toogle_winrate = lazy(toogle_winrate$lambda);
   Kotlin.defineModule('WabbaTrackWeb_main', _);
   return _;
 }(typeof WabbaTrackWeb_main === 'undefined' ? {} : WabbaTrackWeb_main, kotlin);

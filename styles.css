@@ -17,46 +17,60 @@
 html, body {
     font-family: 'Roboto', 'Helvetica', sans-serif;
 }
-.wabbatrack-layout .mdl-layout__header .mdl-layout__drawer-button {
+.wt-layout .mdl-layout__header .mdl-layout__drawer-button {
     color: rgba(0, 0, 0, 0.54);
 }
-.wabbatrack-header {
+.wt-header {
     margin: 0 auto 2px;
     min-height: 70px;
 }
-.wabbatrack-ribbon {
+.wt-tabs {
     width: 100%;
-    height: 40vh;
+}
+.wt-ribbon {
+    width: 100%;
+    height: 38vh;
     background-color: #3F51B5;
     -webkit-flex-shrink: 0;
     -ms-flex-negative: 0;
     flex-shrink: 0;
 }
-.wabbatrack-main {
-    border-radius: 2px;
+.wt-main {
     margin-top: -36vh;
     -webkit-flex-shrink: 0;
     -ms-flex-negativ
 }
-.wabbatrack-container {
+.wt-container {
     max-width: 1600px;
     width: calc(100% - 16px);
     margin: 0 auto;
 }
-.wabbatrack-winrate {
-    max-width: 100px;
-    position: fixed;
-    right: 0;
-    margin-right: 5%;
-}
-.wabbatrack-winrate {
+.wt-statistics-mode {
+    margin-right: 4%;
     color: white;
 }
-.wabbatrack-table {
-    margin: 0 auto;
-    margin-top: 50px;
+.wt-statistics-mode .mdl-radio {
+    margin-right: 5px;
 }
-.wabbatrack-attr {
+.wt-statistics-mode .mdl-radio.is-checked .mdl-radio__outer-circle {
+    border: 2px solid rgb(0,188,212);
+}
+.wt-statistics-mode .mdl-radio .mdl-radio__inner-circle {
+    background: rgb(0,188,212);
+}
+.wt-winrate {
+    max-width: 100px;
+    margin-right: 5%;
+    color: white;
+}
+.wt-table {
+    margin: 0 auto;
+    margin-top: 30px;
+    display: block;
+    overflow-x: auto;
+    border-radius: 2px;
+}
+.wt-attr {
     height: 15px;
     width: 15px;
 }
