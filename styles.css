@@ -43,7 +43,7 @@ html, body {
 }
 .wt-container {
     max-width: 1600px;
-    width: calc(100% - 160px);
+    width: calc(100% - 230px);
     margin: 0 auto;
     padding-top: 0px;
 }
@@ -69,10 +69,15 @@ html, body {
     margin-right: 5%;
     color: white;
 }
-.wt-statistics-dropdown {
+#statistics-winrate.mdl-switch.is-checked .mdl-switch__track {
+    background: rgba(0,0,0,.26);
+}
+#statistics-winrate.is-checked .mdl-switch__thumb {
+    background: rgb(0,188,212);
+}
+.wt-statistics-season {
     color: white;
     margin-bottom: 5px;
-    margin-right: 5%;
 }
 
 /* History */
@@ -113,12 +118,21 @@ html, body {
 }
 
 /* Statistics */
+.wt-statistics {
+    margin-top: -7vh;
+}
 .wt-table {
     margin: 0 auto;
     margin-top: 30px;
     display: block;
     overflow-x: auto;
     border-radius: 2px;
+}
+.wt-statistics th {
+    padding: 12px;
+}
+.mdl-data-table th:first-of-type {
+    padding-left: 12px;
 }
 .wt-attr {
     height: 15px;

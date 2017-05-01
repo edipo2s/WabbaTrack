@@ -21,6 +21,9 @@ import kotlin.js.json
 
 val TESLEGENDS_DB_URL = "https://tes-legends-assistant.firebaseio.com"
 
+val statistics_table_player by lazy { document.getElementById("statistics-player-cls") as HTMLElement }
+val statistics_table_opponent by lazy { document.getElementById("statistics-opponent-cls") as HTMLElement }
+
 val radio_ranked by lazy { document.getElementById("statistics-ranked") as HTMLLabelElement }
 val radio_casual by lazy { document.getElementById("statistics-casual") as HTMLLabelElement }
 val radio_arena by lazy { document.getElementById("statistics-arena") as HTMLLabelElement }
@@ -167,6 +170,8 @@ private fun showMatches() {
                     }
         }
         // Statistics
+        var totalWins = 0
+        var totalLosses = 0
         val matchesByClass = userMatches
                 ?.groupBy { it.player.cls }
                 ?.mapValues {
@@ -179,6 +184,8 @@ private fun showMatches() {
                         removeChild(it)
                     }
                 }
+                var totalClassWins = 0
+                var totalClassLosses = 0
                 DeckClass.values().forEach { opponentCls ->
                     appendChild(createElement("th").apply {
                         setAttribute("style", "text-align: center;")
@@ -187,8 +194,10 @@ private fun showMatches() {
                                 ?.filter { currentSeason == null || it.season == currentSeason?.id }
                         val wins = vsMatches?.count { it.win } ?: 0
                         val loses = vsMatches?.count { !it.win } ?: 0
+                        totalClassWins += wins
+                        totalClassLosses += loses
                         val matches = wins + loses
-                        val winRate = 100 / matches * wins
+                        val winRate = 100 * wins / matches
                         if (resultAsWinRate) {
                             textContent = "$winRate%".takeIf { matches > 0 } ?: "-"
                         } else {
@@ -196,7 +205,55 @@ private fun showMatches() {
                         }
                     })
                 }
+                appendChild(createElement("th").apply {
+                    setAttribute("style", "text-align: center;")
+                    val totalClassMatches = totalClassWins + totalClassLosses
+                    val winRate = 100 * totalClassWins / totalClassMatches
+                    if (resultAsWinRate) {
+                        textContent = "$winRate%".takeIf { totalClassMatches > 0 } ?: "-"
+                    } else {
+                        textContent = "$totalClassWins/$totalClassLosses".takeIf { totalClassMatches > 0 } ?: "-"
+                    }
+                })
+                totalWins += totalClassWins
+                totalLosses += totalClassLosses
             }
+        }
+        getElementById("playerTotal")?.apply {
+            while (childElementCount > 1) {
+                lastChild?.let {
+                    removeChild(it)
+                }
+            }
+            val matchesByOpponent = userMatches?.groupBy { it.opponent.cls }
+            DeckClass.values().forEach { opponentCls ->
+                appendChild(createElement("th").apply {
+                    setAttribute("style", "text-align: center;")
+                    val vsMatches = matchesByOpponent
+                            ?.get(opponentCls)
+                            ?.filter { it.mode == currentMode }
+                            ?.filter { currentSeason == null || it.season == currentSeason?.id }
+                    val wins = vsMatches?.count { it.win } ?: 0
+                    val loses = vsMatches?.count { !it.win } ?: 0
+                    val matches = wins + loses
+                    val winRate = 100 * wins / matches
+                    if (resultAsWinRate) {
+                        textContent = "$winRate%".takeIf { matches > 0 } ?: "-"
+                    } else {
+                        textContent = "$wins/$loses".takeIf { matches > 0 } ?: "-"
+                    }
+                })
+            }
+            appendChild(createElement("th").apply {
+                setAttribute("style", "text-align: center;")
+                val totalMatches = totalWins + totalLosses
+                val winRate = 100 * totalWins / totalMatches
+                if (resultAsWinRate) {
+                    textContent = "$winRate%".takeIf { totalMatches > 0 } ?: "-"
+                } else {
+                    textContent = "$totalWins/$totalLosses".takeIf { totalMatches > 0 } ?: "-"
+                }
+            })
         }
     }
 }
@@ -204,7 +261,7 @@ private fun showMatches() {
 private fun buildStatisticsTable() {
     with(document) {
         DeckClass.values().forEach { cls ->
-            getElementById("statistics-player-cls")?.appendChild(
+            statistics_table_player.appendChild(
                     createElement("tr").apply {
                         id = "player${cls.name}"
                         appendChild(createElement("td").apply {
@@ -212,12 +269,25 @@ private fun buildStatisticsTable() {
                         })
                     }
             )
-            getElementById("statistics-opponent-cls")?.appendChild(
+            statistics_table_opponent.appendChild(
                     createElement("th").apply {
                         addDeckClassIcons(cls)
                     }
             )
         }
+        statistics_table_opponent.appendChild(
+                createElement("th").apply {
+                    textContent = "Total"
+                }
+        )
+        statistics_table_player.appendChild(
+                createElement("tr").apply {
+                    id = "playerTotal"
+                    appendChild(createElement("td").apply {
+                        textContent = "Total"
+                    })
+                }
+        )
     }
 }
 

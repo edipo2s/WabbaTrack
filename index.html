@@ -54,6 +54,7 @@
     <script type="text/javascript">
       $(document).ready(this['WabbaTrackWeb_main'].com.ediposouza.Main)
 
+
     </script>
 
 </head>
@@ -95,13 +96,7 @@
                     <span class="mdl-radio__label">Arena</span>
                 </label>
             </div>
-            <label id="statistics-winrate"
-                   class="wt-statistics-winrate mdl-switch mdl-js-switch mdl-js-ripple-effect"
-                   for="switch-2">
-                <input type="checkbox" id="switch-2" class="mdl-switch__input">
-                <span class="mdl-switch__label">Win Rate</span>
-            </label>
-            <div class="wt-statistics-dropdown">
+            <div class="wt-statistics-season">
                 <span id="statistics-seasons-label">All Seasons</span>
                 <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
                     <i class="material-icons" role="presentation">arrow_drop_down</i>
@@ -130,7 +125,14 @@
                 </table>
             </div>
 
-            <div class="mdl-layout__tab-panel" id="statistics">
+            <div class="wt-statistics mdl-layout__tab-panel" id="statistics">
+                <label id="statistics-winrate"
+                       class="wt-statistics-winrate mdl-switch mdl-js-switch mdl-js-ripple-effect"
+                       for="switch-2">
+                    <input type="checkbox" id="switch-2" class="mdl-switch__input">
+                    <span class="mdl-switch__label">Win Rate</span>
+                </label>
+
                 <table class="wt-table mdl-data-table mdl-js-data-table mdl-shadow--2dp">
                     <thead>
                     <tr id="statistics-opponent-cls">
@@ -141,8 +143,8 @@
                     </tbody>
                 </table>
 
+            </div>
         </div>
-
     </main>
 </div>
 </body>
