@@ -75,61 +75,196 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     else
       return false;
   }
-  var TESLEGENDS_DB_URL;
-  function radio_ranked$lambda() {
+  function UI() {
+    UI_instance = this;
+    this.statistics_table_player$delegate = lazy(UI$statistics_table_player$lambda);
+    this.statistics_table_opponent$delegate = lazy(UI$statistics_table_opponent$lambda);
+    this.radio_ranked$delegate = lazy(UI$radio_ranked$lambda);
+    this.radio_casual$delegate = lazy(UI$radio_casual$lambda);
+    this.radio_arena$delegate = lazy(UI$radio_arena$lambda);
+    this.toogle_winrate$delegate = lazy(UI$toogle_winrate$lambda);
+    this.dropdown_seasons$delegate = lazy(UI$dropdown_seasons$lambda);
+    this.dropdown_seasons_label$delegate = lazy(UI$dropdown_seasons_label$lambda);
+  }
+  Object.defineProperty(UI.prototype, 'statistics_table_player', {
+    get: function () {
+      var $receiver = this.statistics_table_player$delegate;
+      new Kotlin.PropertyMetadata('statistics_table_player');
+      return $receiver.value;
+    }
+  });
+  Object.defineProperty(UI.prototype, 'statistics_table_opponent', {
+    get: function () {
+      var $receiver = this.statistics_table_opponent$delegate;
+      new Kotlin.PropertyMetadata('statistics_table_opponent');
+      return $receiver.value;
+    }
+  });
+  Object.defineProperty(UI.prototype, 'radio_ranked', {
+    get: function () {
+      var $receiver = this.radio_ranked$delegate;
+      new Kotlin.PropertyMetadata('radio_ranked');
+      return $receiver.value;
+    }
+  });
+  Object.defineProperty(UI.prototype, 'radio_casual', {
+    get: function () {
+      var $receiver = this.radio_casual$delegate;
+      new Kotlin.PropertyMetadata('radio_casual');
+      return $receiver.value;
+    }
+  });
+  Object.defineProperty(UI.prototype, 'radio_arena', {
+    get: function () {
+      var $receiver = this.radio_arena$delegate;
+      new Kotlin.PropertyMetadata('radio_arena');
+      return $receiver.value;
+    }
+  });
+  Object.defineProperty(UI.prototype, 'toogle_winrate', {
+    get: function () {
+      var $receiver = this.toogle_winrate$delegate;
+      new Kotlin.PropertyMetadata('toogle_winrate');
+      return $receiver.value;
+    }
+  });
+  Object.defineProperty(UI.prototype, 'dropdown_seasons', {
+    get: function () {
+      var $receiver = this.dropdown_seasons$delegate;
+      new Kotlin.PropertyMetadata('dropdown_seasons');
+      return $receiver.value;
+    }
+  });
+  Object.defineProperty(UI.prototype, 'dropdown_seasons_label', {
+    get: function () {
+      var $receiver = this.dropdown_seasons_label$delegate;
+      new Kotlin.PropertyMetadata('dropdown_seasons_label');
+      return $receiver.value;
+    }
+  });
+  UI.prototype.buildStatisticsTable = function () {
+    var $receiver = document;
+    var $receiver_0 = DeckClass$values();
+    var tmp$;
+    for (tmp$ = 0; tmp$ !== $receiver_0.length; ++tmp$) {
+      var element = $receiver_0[tmp$];
+      var tmp$_0 = this.statistics_table_player;
+      var $receiver_1 = $receiver.createElement('tr');
+      $receiver_1.id = 'player' + element.name;
+      var $receiver_2 = $receiver.createElement('td');
+      addDeckClassIcons($receiver_2, element);
+      $receiver_1.appendChild($receiver_2);
+      tmp$_0.appendChild($receiver_1);
+      var tmp$_1 = this.statistics_table_opponent;
+      var $receiver_3 = $receiver.createElement('th');
+      addDeckClassIcons($receiver_3, element);
+      tmp$_1.appendChild($receiver_3);
+    }
+    var tmp$_2 = this.statistics_table_opponent;
+    var $receiver_4 = $receiver.createElement('th');
+    $receiver_4.textContent = 'Total';
+    tmp$_2.appendChild($receiver_4);
+    var tmp$_3 = this.statistics_table_player;
+    var $receiver_5 = $receiver.createElement('tr');
+    $receiver_5.id = 'playerTotal';
+    var $receiver_6 = $receiver.createElement('td');
+    $receiver_6.textContent = 'Total';
+    $receiver_5.appendChild($receiver_6);
+    tmp$_3.appendChild($receiver_5);
+  };
+  UI.prototype.buildSeasonFilter_pkk503$ = function (seasons, onItemClick) {
+    this.dropdown_seasons.appendChild(this.createSeasonItem_0(null, onItemClick));
+    var tmp$;
+    tmp$ = seasons.iterator();
+    while (tmp$.hasNext()) {
+      var element = tmp$.next();
+      this.dropdown_seasons.appendChild(this.createSeasonItem_0(element, onItemClick));
+    }
+  };
+  UI.prototype.updateSeasonLabel_xjqf0i$ = function (season) {
+    var tmp$;
+    this.dropdown_seasons_label.textContent = (tmp$ = season != null ? season.year + ' ' + season.month : null) != null ? tmp$ : 'All Seasons';
+  };
+  function UI$createSeasonItem$lambda$lambda(closure$onItemClick, closure$season) {
+    return function (it) {
+      $('.mdl-menu__container').removeClass('is-visible');
+      closure$onItemClick(closure$season);
+    };
+  }
+  UI.prototype.createSeasonItem_0 = function (season, onItemClick) {
+    var tmp$;
+    var $receiver = Kotlin.isType(tmp$ = document.createElement('li'), HTMLElement) ? tmp$ : Kotlin.throwCCE();
+    var tmp$_0;
+    addClass($receiver, ['mdl-menu__item mdl-js-ripple-effect']);
+    $receiver.textContent = (tmp$_0 = season != null ? season.year + ' ' + season.month : null) != null ? tmp$_0 : 'All Seasons';
+    $receiver.onclick = UI$createSeasonItem$lambda$lambda(onItemClick, season);
+    var $receiver_0 = document.createElement('span');
+    addClass($receiver_0, ['mdl-ripple']);
+    $receiver.appendChild($receiver_0);
+    componentHandler.upgradeElement($receiver);
+    return $receiver;
+  };
+  UI.prototype.createMatchResult_vux9f0$ = function (wins, loses) {
+    var $receiver = document.createElement('th');
+    var tmp$, tmp$_0;
+    $receiver.setAttribute('style', 'text-align: center;');
+    var matches = wins + loses | 0;
+    var winRate = (100 * wins | 0) / matches | 0;
+    if (resultAsWinRate) {
+      var $receiver_0 = winRate.toString() + '%';
+      $receiver.textContent = (tmp$ = matches > 0 ? $receiver_0 : null) != null ? tmp$ : '-';
+    }
+     else {
+      var $receiver_1 = wins.toString() + '/' + loses;
+      $receiver.textContent = (tmp$_0 = matches > 0 ? $receiver_1 : null) != null ? tmp$_0 : '-';
+    }
+    return $receiver;
+  };
+  function UI$statistics_table_player$lambda() {
+    var tmp$;
+    return Kotlin.isType(tmp$ = document.getElementById('statistics-player-cls'), HTMLElement) ? tmp$ : Kotlin.throwCCE();
+  }
+  function UI$statistics_table_opponent$lambda() {
+    var tmp$;
+    return Kotlin.isType(tmp$ = document.getElementById('statistics-opponent-cls'), HTMLElement) ? tmp$ : Kotlin.throwCCE();
+  }
+  function UI$radio_ranked$lambda() {
     var tmp$;
     return Kotlin.isType(tmp$ = document.getElementById('statistics-ranked'), HTMLLabelElement) ? tmp$ : Kotlin.throwCCE();
   }
-  var radio_ranked;
-  function get_radio_ranked() {
-    new Kotlin.PropertyMetadata('radio_ranked');
-    return radio_ranked.value;
-  }
-  function radio_casual$lambda() {
+  function UI$radio_casual$lambda() {
     var tmp$;
     return Kotlin.isType(tmp$ = document.getElementById('statistics-casual'), HTMLLabelElement) ? tmp$ : Kotlin.throwCCE();
   }
-  var radio_casual;
-  function get_radio_casual() {
-    new Kotlin.PropertyMetadata('radio_casual');
-    return radio_casual.value;
-  }
-  function radio_arena$lambda() {
+  function UI$radio_arena$lambda() {
     var tmp$;
     return Kotlin.isType(tmp$ = document.getElementById('statistics-arena'), HTMLLabelElement) ? tmp$ : Kotlin.throwCCE();
   }
-  var radio_arena;
-  function get_radio_arena() {
-    new Kotlin.PropertyMetadata('radio_arena');
-    return radio_arena.value;
-  }
-  function toogle_winrate$lambda() {
+  function UI$toogle_winrate$lambda() {
     var tmp$;
     return Kotlin.isType(tmp$ = document.getElementById('statistics-winrate'), HTMLLabelElement) ? tmp$ : Kotlin.throwCCE();
   }
-  var toogle_winrate;
-  function get_toogle_winrate() {
-    new Kotlin.PropertyMetadata('toogle_winrate');
-    return toogle_winrate.value;
-  }
-  function dropdown_seasons$lambda() {
+  function UI$dropdown_seasons$lambda() {
     var tmp$;
     return Kotlin.isType(tmp$ = document.getElementById('statistics-seasons'), HTMLUListElement) ? tmp$ : Kotlin.throwCCE();
   }
-  var dropdown_seasons;
-  function get_dropdown_seasons() {
-    new Kotlin.PropertyMetadata('dropdown_seasons');
-    return dropdown_seasons.value;
-  }
-  function dropdown_seasons_label$lambda() {
+  function UI$dropdown_seasons_label$lambda() {
     var tmp$;
     return Kotlin.isType(tmp$ = document.getElementById('statistics-seasons-label'), HTMLSpanElement) ? tmp$ : Kotlin.throwCCE();
   }
-  var dropdown_seasons_label;
-  function get_dropdown_seasons_label() {
-    new Kotlin.PropertyMetadata('dropdown_seasons_label');
-    return dropdown_seasons_label.value;
+  UI.$metadata$ = {
+    kind: Kotlin.Kind.OBJECT,
+    simpleName: 'UI',
+    interfaces: []
+  };
+  var UI_instance = null;
+  function UI_getInstance() {
+    if (UI_instance === null) {
+      new UI();
+    }
+    return UI_instance;
   }
+  var TESLEGENDS_DB_URL;
   var userID;
   var userMatches;
   var currentMode;
@@ -138,27 +273,30 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     return currentSeason;
   }
   function set_currentSeason(value) {
-    var tmp$;
     currentSeason = value;
-    get_dropdown_seasons_label().textContent = (tmp$ = value != null ? value.year + ' ' + value.month : null) != null ? tmp$ : 'All Seasons';
+    UI_getInstance().updateSeasonLabel_xjqf0i$(value);
   }
   var resultAsWinRate;
+  function Main$lambda$lambda(season) {
+    set_currentSeason(season);
+    showMatches();
+  }
   function Main$lambda(seasons) {
-    buildSeasonFilter(seasons);
     if (!seasons.isEmpty()) {
       set_currentSeason(seasons.get_za3lpa$(0));
     }
+    UI_getInstance().buildSeasonFilter_pkk503$(seasons, Main$lambda$lambda);
   }
-  function Main$lambda$lambda(it) {
+  function Main$lambda$lambda_0(it) {
     return it.uuid;
   }
   function Main$lambda_0(matches) {
-    userMatches = Kotlin.kotlin.collections.sortedWith_eknfly$(matches, new Kotlin.kotlin.comparisons.compareByDescending$f(Main$lambda$lambda));
+    userMatches = Kotlin.kotlin.collections.sortedWith_eknfly$(matches, new Kotlin.kotlin.comparisons.compareByDescending$f(Main$lambda$lambda_0));
     showMatches();
   }
   function Main() {
     userID = (new URL(document.URL)).searchParams.get('id');
-    buildStatisticsTable();
+    UI_getInstance().buildStatisticsTable();
     configureListeners();
     getSeasons(Main$lambda);
     getUserMatches(Main$lambda_0);
@@ -176,14 +314,14 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     showMatches();
   }
   function configureListeners$lambda_2(it) {
-    resultAsWinRate = hasClass(get_toogle_winrate(), 'is-checked');
+    resultAsWinRate = hasClass(UI_getInstance().toogle_winrate, 'is-checked');
     showMatches();
   }
   function configureListeners() {
-    get_radio_ranked().onchange = configureListeners$lambda;
-    get_radio_casual().onchange = configureListeners$lambda_0;
-    get_radio_arena().onchange = configureListeners$lambda_1;
-    get_toogle_winrate().onchange = configureListeners$lambda_2;
+    UI_getInstance().radio_ranked.onchange = configureListeners$lambda;
+    UI_getInstance().radio_casual.onchange = configureListeners$lambda_0;
+    UI_getInstance().radio_arena.onchange = configureListeners$lambda_1;
+    UI_getInstance().toogle_winrate.onchange = configureListeners$lambda_2;
   }
   function getUserMatches$ObjectLiteral() {
     this.method_5kbz6n$_0 = 'GET';
@@ -306,52 +444,52 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   }
   function showMatches() {
     var $receiver = document;
-    var tmp$, tmp$_0;
+    var tmp$, tmp$_0, tmp$_1;
     if ((tmp$ = $receiver.getElementById('history-list')) != null) {
-      var tmp$_1, tmp$_2;
+      var tmp$_2, tmp$_3;
       removeAllChilds(tmp$);
-      var tmp$_3;
+      var tmp$_4;
       if (userMatches != null) {
         var $receiver_0 = userMatches;
         var destination = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
-        var tmp$_4;
-        tmp$_4 = $receiver_0.iterator();
-        while (tmp$_4.hasNext()) {
-          var element = tmp$_4.next();
+        var tmp$_5;
+        tmp$_5 = $receiver_0.iterator();
+        while (tmp$_5.hasNext()) {
+          var element = tmp$_5.next();
           if (element.mode === currentMode) {
             destination.add_11rb$(element);
           }
         }
-        tmp$_3 = destination;
+        tmp$_4 = destination;
       }
        else
-        tmp$_3 = null;
-      var tmp$_5;
-      if ((tmp$_1 = tmp$_3) != null) {
+        tmp$_4 = null;
+      var tmp$_6;
+      if ((tmp$_2 = tmp$_4) != null) {
         var destination_0 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
-        var tmp$_6;
-        tmp$_6 = tmp$_1.iterator();
-        while (tmp$_6.hasNext()) {
-          var element_0 = tmp$_6.next();
-          var tmp$_7;
-          if (get_currentSeason() == null || Kotlin.equals(element_0.season, (tmp$_7 = get_currentSeason()) != null ? tmp$_7.id : null)) {
+        var tmp$_7;
+        tmp$_7 = tmp$_2.iterator();
+        while (tmp$_7.hasNext()) {
+          var element_0 = tmp$_7.next();
+          var tmp$_8;
+          if (get_currentSeason() == null || Kotlin.equals(element_0.season, (tmp$_8 = get_currentSeason()) != null ? tmp$_8.id : null)) {
             destination_0.add_11rb$(element_0);
           }
         }
-        tmp$_5 = destination_0;
+        tmp$_6 = destination_0;
       }
        else
-        tmp$_5 = null;
-      if ((tmp$_2 = tmp$_5) != null) {
-        var tmp$_8;
-        tmp$_8 = tmp$_2.iterator();
-        while (tmp$_8.hasNext()) {
-          var element_1 = tmp$_8.next();
+        tmp$_6 = null;
+      if ((tmp$_3 = tmp$_6) != null) {
+        var tmp$_9;
+        tmp$_9 = tmp$_3.iterator();
+        while (tmp$_9.hasNext()) {
+          var element_1 = tmp$_9.next();
           var $receiver_1 = $receiver.createElement('tr');
           var $receiver_2 = $receiver.createElement('th');
-          var tmp$_9;
+          var tmp$_10;
           $receiver_2.setAttribute('style', 'text-align: center;');
-          var $receiver_3 = $receiver.createElement((tmp$_9 = element_1.first ? 'img' : null) != null ? tmp$_9 : 'div');
+          var $receiver_3 = $receiver.createElement((tmp$_10 = element_1.first ? 'img' : null) != null ? tmp$_10 : 'div');
           addClass($receiver_3, ['wt-history-first']);
           if (element_1.first) {
             $receiver_3.setAttribute('src', 'images/ic_first.png');
@@ -368,9 +506,9 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
           addDeckClassIcons($receiver_4, element_1.opponent.cls);
           $receiver_1.appendChild($receiver_4);
           var $receiver_6 = $receiver.createElement('th');
-          var tmp$_10;
+          var tmp$_11;
           $receiver_6.setAttribute('style', 'text-align: center;');
-          var $receiver_7 = $receiver.createElement((tmp$_10 = element_1.legend ? 'img' : null) != null ? tmp$_10 : 'div');
+          var $receiver_7 = $receiver.createElement((tmp$_11 = element_1.legend ? 'img' : null) != null ? tmp$_11 : 'div');
           addClass($receiver_7, ['wt-history-legend']);
           if (element_1.legend) {
             $receiver_7.setAttribute('src', 'images/ic_legend.png');
@@ -389,10 +527,10 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
           var $receiver_10 = $receiver.createElement('th');
           $receiver_10.setAttribute('style', 'text-align: center;');
           var $receiver_11 = $receiver.createElement('span');
-          var tmp$_11, tmp$_12;
+          var tmp$_12, tmp$_13;
           var $receiver_12 = 'wt-history-win';
-          addClass($receiver_11, [(tmp$_11 = element_1.win ? $receiver_12 : null) != null ? tmp$_11 : 'wt-history-loss']);
-          $receiver_11.textContent = (tmp$_12 = element_1.win ? 'Win' : null) != null ? tmp$_12 : 'Loss';
+          addClass($receiver_11, [(tmp$_12 = element_1.win ? $receiver_12 : null) != null ? tmp$_12 : 'wt-history-loss']);
+          $receiver_11.textContent = (tmp$_13 = element_1.win ? 'Win' : null) != null ? tmp$_13 : 'Loss';
           $receiver_10.appendChild($receiver_11);
           $receiver_1.appendChild($receiver_10);
           var $receiver_13 = $receiver.createElement('th');
@@ -406,216 +544,269 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
         }
       }
     }
-    var tmp$_13;
+    var totalWins = {v: 0};
+    var totalLosses = {v: 0};
+    var tmp$_14;
     if (userMatches != null) {
       var $receiver_15 = userMatches;
       var destination_1 = Kotlin.kotlin.collections.LinkedHashMap_init_q3lmfv$();
-      var tmp$_14;
-      tmp$_14 = $receiver_15.iterator();
-      while (tmp$_14.hasNext()) {
-        var element_2 = tmp$_14.next();
+      var tmp$_15;
+      tmp$_15 = $receiver_15.iterator();
+      while (tmp$_15.hasNext()) {
+        var element_2 = tmp$_15.next();
         var key = element_2.player.cls;
-        var tmp$_15;
+        var tmp$_16;
         var value = destination_1.get_11rb$(key);
         if (value == null) {
           var answer = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
           destination_1.put_xwzc9p$(key, answer);
-          tmp$_15 = answer;
+          tmp$_16 = answer;
         }
          else {
-          tmp$_15 = value;
+          tmp$_16 = value;
         }
-        var list = tmp$_15;
+        var list = tmp$_16;
         list.add_11rb$(element_2);
       }
-      tmp$_13 = destination_1;
+      tmp$_14 = destination_1;
     }
      else
-      tmp$_13 = null;
-    var tmp$_16;
-    if ((tmp$_0 = tmp$_13) != null) {
+      tmp$_14 = null;
+    var tmp$_17;
+    if ((tmp$_0 = tmp$_14) != null) {
       var destination_2 = Kotlin.kotlin.collections.LinkedHashMap_init_xf5xz2$(Kotlin.kotlin.collections.mapCapacity_za3lpa$(tmp$_0.size));
-      var tmp$_17;
-      tmp$_17 = tmp$_0.entries.iterator();
-      while (tmp$_17.hasNext()) {
-        var element_3 = tmp$_17.next();
-        var tmp$_18 = destination_2.put_xwzc9p$;
-        var tmp$_19 = element_3.key;
+      var tmp$_18;
+      tmp$_18 = tmp$_0.entries.iterator();
+      while (tmp$_18.hasNext()) {
+        var element_3 = tmp$_18.next();
+        var tmp$_19 = destination_2.put_xwzc9p$;
+        var tmp$_20 = element_3.key;
         var $receiver_16 = element_3.value;
         var destination_3 = Kotlin.kotlin.collections.LinkedHashMap_init_q3lmfv$();
-        var tmp$_20;
-        tmp$_20 = $receiver_16.iterator();
-        while (tmp$_20.hasNext()) {
-          var element_4 = tmp$_20.next();
+        var tmp$_21;
+        tmp$_21 = $receiver_16.iterator();
+        while (tmp$_21.hasNext()) {
+          var element_4 = tmp$_21.next();
           var key_0 = element_4.opponent.cls;
-          var tmp$_21;
+          var tmp$_22;
           var value_0 = destination_3.get_11rb$(key_0);
           if (value_0 == null) {
             var answer_0 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
             destination_3.put_xwzc9p$(key_0, answer_0);
-            tmp$_21 = answer_0;
+            tmp$_22 = answer_0;
           }
            else {
-            tmp$_21 = value_0;
+            tmp$_22 = value_0;
           }
-          var list_0 = tmp$_21;
+          var list_0 = tmp$_22;
           list_0.add_11rb$(element_4);
         }
-        tmp$_18.call(destination_2, tmp$_19, destination_3);
+        tmp$_19.call(destination_2, tmp$_20, destination_3);
       }
-      tmp$_16 = destination_2;
+      tmp$_17 = destination_2;
     }
      else
-      tmp$_16 = null;
-    var matchesByClass = tmp$_16;
+      tmp$_17 = null;
+    var matchesByClass = tmp$_17;
     var $receiver_17 = DeckClass$values();
-    var tmp$_22;
-    for (tmp$_22 = 0; tmp$_22 !== $receiver_17.length; ++tmp$_22) {
-      var element_5 = $receiver_17[tmp$_22];
-      var tmp$_23;
-      if ((tmp$_23 = $receiver.getElementById('player' + element_5.name)) != null) {
-        var tmp$_24;
-        while (tmp$_23.childElementCount > 1) {
-          if ((tmp$_24 = tmp$_23.lastChild) != null) {
-            tmp$_23.removeChild(tmp$_24);
+    var tmp$_23;
+    for (tmp$_23 = 0; tmp$_23 !== $receiver_17.length; ++tmp$_23) {
+      var element_5 = $receiver_17[tmp$_23];
+      var tmp$_24;
+      if ((tmp$_24 = $receiver.getElementById('player' + element_5.name)) != null) {
+        var tmp$_25;
+        while (tmp$_24.childElementCount > 1) {
+          if ((tmp$_25 = tmp$_24.lastChild) != null) {
+            tmp$_24.removeChild(tmp$_25);
           }
         }
+        var totalClassWins = {v: 0};
+        var totalClassLosses = {v: 0};
         var $receiver_18 = DeckClass$values();
-        var tmp$_25;
-        for (tmp$_25 = 0; tmp$_25 !== $receiver_18.length; ++tmp$_25) {
-          var element_6 = $receiver_18[tmp$_25];
-          var $receiver_19 = $receiver.createElement('th');
-          var tmp$_26, tmp$_27, tmp$_28, tmp$_29, tmp$_30, tmp$_31, tmp$_32;
-          $receiver_19.setAttribute('style', 'text-align: center;');
-          var tmp$_33;
-          if ((tmp$_27 = (tmp$_26 = matchesByClass != null ? matchesByClass.get_11rb$(element_5) : null) != null ? tmp$_26.get_11rb$(element_6) : null) != null) {
+        var tmp$_26;
+        for (tmp$_26 = 0; tmp$_26 !== $receiver_18.length; ++tmp$_26) {
+          var element_6 = $receiver_18[tmp$_26];
+          var tmp$_27, tmp$_28, tmp$_29, tmp$_30, tmp$_31;
+          var tmp$_32;
+          if ((tmp$_28 = (tmp$_27 = matchesByClass != null ? matchesByClass.get_11rb$(element_5) : null) != null ? tmp$_27.get_11rb$(element_6) : null) != null) {
             var destination_4 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
-            var tmp$_34;
-            tmp$_34 = tmp$_27.iterator();
-            while (tmp$_34.hasNext()) {
-              var element_7 = tmp$_34.next();
+            var tmp$_33;
+            tmp$_33 = tmp$_28.iterator();
+            while (tmp$_33.hasNext()) {
+              var element_7 = tmp$_33.next();
               if (element_7.mode === currentMode) {
                 destination_4.add_11rb$(element_7);
               }
             }
-            tmp$_33 = destination_4;
+            tmp$_32 = destination_4;
           }
            else
-            tmp$_33 = null;
-          var tmp$_35;
-          if ((tmp$_28 = tmp$_33) != null) {
+            tmp$_32 = null;
+          var tmp$_34;
+          if ((tmp$_29 = tmp$_32) != null) {
             var destination_5 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
-            var tmp$_36;
-            tmp$_36 = tmp$_28.iterator();
-            while (tmp$_36.hasNext()) {
-              var element_8 = tmp$_36.next();
-              var tmp$_37;
-              if (get_currentSeason() == null || Kotlin.equals(element_8.season, (tmp$_37 = get_currentSeason()) != null ? tmp$_37.id : null)) {
+            var tmp$_35;
+            tmp$_35 = tmp$_29.iterator();
+            while (tmp$_35.hasNext()) {
+              var element_8 = tmp$_35.next();
+              var tmp$_36;
+              if (get_currentSeason() == null || Kotlin.equals(element_8.season, (tmp$_36 = get_currentSeason()) != null ? tmp$_36.id : null)) {
                 destination_5.add_11rb$(element_8);
               }
             }
-            tmp$_35 = destination_5;
+            tmp$_34 = destination_5;
           }
            else
-            tmp$_35 = null;
-          var vsMatches = tmp$_35;
-          var tmp$_38;
-          if (vsMatches != null) {
-            var tmp$_39;
+            tmp$_34 = null;
+          var classMatches = tmp$_34;
+          var tmp$_37;
+          if (classMatches != null) {
+            var tmp$_38;
             var count_26 = 0;
-            tmp$_39 = vsMatches.iterator();
-            while (tmp$_39.hasNext()) {
-              var element_9 = tmp$_39.next();
+            tmp$_38 = classMatches.iterator();
+            while (tmp$_38.hasNext()) {
+              var element_9 = tmp$_38.next();
               if (element_9.win) {
                 count_26 = count_26 + 1 | 0;
               }
             }
-            tmp$_38 = count_26;
+            tmp$_37 = count_26;
           }
            else
-            tmp$_38 = null;
-          var wins = (tmp$_29 = tmp$_38) != null ? tmp$_29 : 0;
-          var tmp$_40;
-          if (vsMatches != null) {
-            var tmp$_41;
+            tmp$_37 = null;
+          var wins = (tmp$_30 = tmp$_37) != null ? tmp$_30 : 0;
+          var tmp$_39;
+          if (classMatches != null) {
+            var tmp$_40;
             var count_27 = 0;
-            tmp$_41 = vsMatches.iterator();
-            while (tmp$_41.hasNext()) {
-              var element_10 = tmp$_41.next();
+            tmp$_40 = classMatches.iterator();
+            while (tmp$_40.hasNext()) {
+              var element_10 = tmp$_40.next();
               if (!element_10.win) {
                 count_27 = count_27 + 1 | 0;
               }
             }
-            tmp$_40 = count_27;
+            tmp$_39 = count_27;
           }
            else
-            tmp$_40 = null;
-          var loses = (tmp$_30 = tmp$_40) != null ? tmp$_30 : 0;
-          var matches = wins + loses | 0;
-          var winRate = Kotlin.imul(100 / matches | 0, wins);
-          if (resultAsWinRate) {
-            var $receiver_20 = winRate.toString() + '%';
-            $receiver_19.textContent = (tmp$_31 = matches > 0 ? $receiver_20 : null) != null ? tmp$_31 : '-';
-          }
-           else {
-            var $receiver_21 = wins.toString() + '/' + loses;
-            $receiver_19.textContent = (tmp$_32 = matches > 0 ? $receiver_21 : null) != null ? tmp$_32 : '-';
-          }
-          tmp$_23.appendChild($receiver_19);
+            tmp$_39 = null;
+          var loses = (tmp$_31 = tmp$_39) != null ? tmp$_31 : 0;
+          totalClassWins.v = totalClassWins.v + wins | 0;
+          totalClassLosses.v = totalClassLosses.v + loses | 0;
+          tmp$_24.appendChild(UI_getInstance().createMatchResult_vux9f0$(wins, loses));
+        }
+        tmp$_24.appendChild(UI_getInstance().createMatchResult_vux9f0$(totalClassWins.v, totalClassLosses.v));
+        totalWins.v = totalWins.v + totalClassWins.v | 0;
+        totalLosses.v = totalLosses.v + totalClassLosses.v | 0;
+      }
+    }
+    if ((tmp$_1 = $receiver.getElementById('playerTotal')) != null) {
+      var tmp$_41;
+      while (tmp$_1.childElementCount > 1) {
+        if ((tmp$_41 = tmp$_1.lastChild) != null) {
+          tmp$_1.removeChild(tmp$_41);
         }
       }
-    }
-  }
-  function buildStatisticsTable() {
-    var $receiver = document;
-    var $receiver_0 = DeckClass$values();
-    var tmp$;
-    for (tmp$ = 0; tmp$ !== $receiver_0.length; ++tmp$) {
-      var element = $receiver_0[tmp$];
-      var tmp$_0, tmp$_1;
-      if ((tmp$_0 = $receiver.getElementById('statistics-player-cls')) != null) {
-        var $receiver_1 = $receiver.createElement('tr');
-        $receiver_1.id = 'player' + element.name;
-        var $receiver_2 = $receiver.createElement('td');
-        addDeckClassIcons($receiver_2, element);
-        $receiver_1.appendChild($receiver_2);
-        tmp$_0.appendChild($receiver_1);
+      var tmp$_42;
+      if (userMatches != null) {
+        var $receiver_19 = userMatches;
+        var destination_6 = Kotlin.kotlin.collections.LinkedHashMap_init_q3lmfv$();
+        var tmp$_43;
+        tmp$_43 = $receiver_19.iterator();
+        while (tmp$_43.hasNext()) {
+          var element_11 = tmp$_43.next();
+          var key_1 = element_11.opponent.cls;
+          var tmp$_44;
+          var value_1 = destination_6.get_11rb$(key_1);
+          if (value_1 == null) {
+            var answer_1 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
+            destination_6.put_xwzc9p$(key_1, answer_1);
+            tmp$_44 = answer_1;
+          }
+           else {
+            tmp$_44 = value_1;
+          }
+          var list_1 = tmp$_44;
+          list_1.add_11rb$(element_11);
+        }
+        tmp$_42 = destination_6;
       }
-      if ((tmp$_1 = $receiver.getElementById('statistics-opponent-cls')) != null) {
-        var $receiver_3 = $receiver.createElement('th');
-        addDeckClassIcons($receiver_3, element);
-        tmp$_1.appendChild($receiver_3);
+       else
+        tmp$_42 = null;
+      var matchesByOpponent = tmp$_42;
+      var $receiver_20 = DeckClass$values();
+      var tmp$_45;
+      for (tmp$_45 = 0; tmp$_45 !== $receiver_20.length; ++tmp$_45) {
+        var element_12 = $receiver_20[tmp$_45];
+        var tmp$_46, tmp$_47, tmp$_48, tmp$_49;
+        var tmp$_50;
+        if ((tmp$_46 = matchesByOpponent != null ? matchesByOpponent.get_11rb$(element_12) : null) != null) {
+          var destination_7 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
+          var tmp$_51;
+          tmp$_51 = tmp$_46.iterator();
+          while (tmp$_51.hasNext()) {
+            var element_13 = tmp$_51.next();
+            if (element_13.mode === currentMode) {
+              destination_7.add_11rb$(element_13);
+            }
+          }
+          tmp$_50 = destination_7;
+        }
+         else
+          tmp$_50 = null;
+        var tmp$_52;
+        if ((tmp$_47 = tmp$_50) != null) {
+          var destination_8 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
+          var tmp$_53;
+          tmp$_53 = tmp$_47.iterator();
+          while (tmp$_53.hasNext()) {
+            var element_14 = tmp$_53.next();
+            var tmp$_54;
+            if (get_currentSeason() == null || Kotlin.equals(element_14.season, (tmp$_54 = get_currentSeason()) != null ? tmp$_54.id : null)) {
+              destination_8.add_11rb$(element_14);
+            }
+          }
+          tmp$_52 = destination_8;
+        }
+         else
+          tmp$_52 = null;
+        var classMatches_0 = tmp$_52;
+        var tmp$_55;
+        if (classMatches_0 != null) {
+          var tmp$_56;
+          var count_28 = 0;
+          tmp$_56 = classMatches_0.iterator();
+          while (tmp$_56.hasNext()) {
+            var element_15 = tmp$_56.next();
+            if (element_15.win) {
+              count_28 = count_28 + 1 | 0;
+            }
+          }
+          tmp$_55 = count_28;
+        }
+         else
+          tmp$_55 = null;
+        var wins_0 = (tmp$_48 = tmp$_55) != null ? tmp$_48 : 0;
+        var tmp$_57;
+        if (classMatches_0 != null) {
+          var tmp$_58;
+          var count_29 = 0;
+          tmp$_58 = classMatches_0.iterator();
+          while (tmp$_58.hasNext()) {
+            var element_16 = tmp$_58.next();
+            if (!element_16.win) {
+              count_29 = count_29 + 1 | 0;
+            }
+          }
+          tmp$_57 = count_29;
+        }
+         else
+          tmp$_57 = null;
+        var loses_0 = (tmp$_49 = tmp$_57) != null ? tmp$_49 : 0;
+        tmp$_1.appendChild(UI_getInstance().createMatchResult_vux9f0$(wins_0, loses_0));
       }
+      tmp$_1.appendChild(UI_getInstance().createMatchResult_vux9f0$(totalWins.v, totalLosses.v));
     }
-  }
-  function buildSeasonFilter(seasons) {
-    get_dropdown_seasons().appendChild(createSeasonItem(null));
-    var tmp$;
-    tmp$ = seasons.iterator();
-    while (tmp$.hasNext()) {
-      var element = tmp$.next();
-      get_dropdown_seasons().appendChild(createSeasonItem(element));
-    }
-  }
-  function createSeasonItem$lambda$lambda(closure$season) {
-    return function (it) {
-      set_currentSeason(closure$season);
-      $('.mdl-menu__container').removeClass('is-visible');
-      showMatches();
-    };
-  }
-  function createSeasonItem(season) {
-    var tmp$;
-    var $receiver = Kotlin.isType(tmp$ = document.createElement('li'), HTMLElement) ? tmp$ : Kotlin.throwCCE();
-    var tmp$_0;
-    addClass($receiver, ['mdl-menu__item mdl-js-ripple-effect']);
-    $receiver.textContent = (tmp$_0 = season != null ? season.year + ' ' + season.month : null) != null ? tmp$_0 : 'All Seasons';
-    $receiver.onclick = createSeasonItem$lambda$lambda(season);
-    var $receiver_0 = document.createElement('span');
-    addClass($receiver_0, ['mdl-ripple']);
-    $receiver.appendChild($receiver_0);
-    componentHandler.upgradeElement($receiver);
-    return $receiver;
   }
   function CardAttribute(name, ordinal) {
     Enum.call(this);
@@ -3258,28 +3449,13 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   package$ediposouza.getString_fxvzox$ = getString;
   package$ediposouza.getInt_fxvzox$ = getInt;
   package$ediposouza.getBoolean_fxvzox$ = getBoolean;
+  Object.defineProperty(package$ediposouza, 'UI', {
+    get: UI_getInstance
+  });
   Object.defineProperty(package$ediposouza, 'TESLEGENDS_DB_URL', {
     get: function () {
       return TESLEGENDS_DB_URL;
     }
-  });
-  Object.defineProperty(package$ediposouza, 'radio_ranked', {
-    get: get_radio_ranked
-  });
-  Object.defineProperty(package$ediposouza, 'radio_casual', {
-    get: get_radio_casual
-  });
-  Object.defineProperty(package$ediposouza, 'radio_arena', {
-    get: get_radio_arena
-  });
-  Object.defineProperty(package$ediposouza, 'toogle_winrate', {
-    get: get_toogle_winrate
-  });
-  Object.defineProperty(package$ediposouza, 'dropdown_seasons', {
-    get: get_dropdown_seasons
-  });
-  Object.defineProperty(package$ediposouza, 'dropdown_seasons_label', {
-    get: get_dropdown_seasons_label
   });
   Object.defineProperty(package$ediposouza, 'userID', {
     get: function () {
@@ -3318,7 +3494,6 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     }
   });
   package$ediposouza.Main = Main;
-  package$ediposouza.buildSeasonFilter_gu2hle$ = buildSeasonFilter;
   Object.defineProperty(CardAttribute, 'STRENGTH', {
     get: CardAttribute$STRENGTH_getInstance
   });
@@ -3840,12 +4015,6 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   package$data.Month = Month;
   package$data.Season = Season;
   TESLEGENDS_DB_URL = 'https://tes-legends-assistant.firebaseio.com';
-  radio_ranked = lazy(radio_ranked$lambda);
-  radio_casual = lazy(radio_casual$lambda);
-  radio_arena = lazy(radio_arena$lambda);
-  toogle_winrate = lazy(toogle_winrate$lambda);
-  dropdown_seasons = lazy(dropdown_seasons$lambda);
-  dropdown_seasons_label = lazy(dropdown_seasons_label$lambda);
   userID = null;
   userMatches = null;
   currentMode = MatchMode$RANKED_getInstance();

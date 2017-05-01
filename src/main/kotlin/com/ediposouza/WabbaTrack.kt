@@ -4,10 +4,6 @@ import com.ediposouza.data.Match
 import com.ediposouza.data.MatchMode
 import com.ediposouza.data.Season
 import com.ediposouza.model.DeckClass
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLLabelElement
-import org.w3c.dom.HTMLSpanElement
-import org.w3c.dom.HTMLUListElement
 import org.w3c.dom.url.URL
 import org.w3c.fetch.RequestCredentials
 import org.w3c.fetch.RequestInit
@@ -21,16 +17,6 @@ import kotlin.js.json
 
 val TESLEGENDS_DB_URL = "https://tes-legends-assistant.firebaseio.com"
 
-val statistics_table_player by lazy { document.getElementById("statistics-player-cls") as HTMLElement }
-val statistics_table_opponent by lazy { document.getElementById("statistics-opponent-cls") as HTMLElement }
-
-val radio_ranked by lazy { document.getElementById("statistics-ranked") as HTMLLabelElement }
-val radio_casual by lazy { document.getElementById("statistics-casual") as HTMLLabelElement }
-val radio_arena by lazy { document.getElementById("statistics-arena") as HTMLLabelElement }
-val toogle_winrate by lazy { document.getElementById("statistics-winrate") as HTMLLabelElement }
-val dropdown_seasons by lazy { document.getElementById("statistics-seasons") as HTMLUListElement }
-val dropdown_seasons_label by lazy { document.getElementById("statistics-seasons-label") as HTMLSpanElement }
-
 var userID: String? = null
 var userMatches: List<Match>? = null
 
@@ -38,18 +24,21 @@ var currentMode: MatchMode = MatchMode.RANKED
 var currentSeason: Season? = null
     set(value) {
         field = value
-        dropdown_seasons_label.textContent = value?.let { "${it.year} ${it.month}" } ?: "All Seasons"
+        UI.updateSeasonLabel(value)
     }
 var resultAsWinRate = false
 
 fun Main() {
     userID = URL(document.URL).searchParams.get("id")
-    buildStatisticsTable()
+    UI.buildStatisticsTable()
     configureListeners()
     getSeasons { seasons ->
-        buildSeasonFilter(seasons)
         if (seasons.isNotEmpty()) {
             currentSeason = seasons[0]
+        }
+        UI.buildSeasonFilter(seasons) { season ->
+            currentSeason = season
+            showMatches()
         }
     }
     getUserMatches { matches ->
@@ -59,20 +48,20 @@ fun Main() {
 }
 
 private fun configureListeners() {
-    radio_ranked.onchange = {
+    UI.radio_ranked.onchange = {
         currentMode = MatchMode.RANKED
         showMatches()
     }
-    radio_casual.onchange = {
+    UI.radio_casual.onchange = {
         currentMode = MatchMode.CASUAL
         showMatches()
     }
-    radio_arena.onchange = {
+    UI.radio_arena.onchange = {
         currentMode = MatchMode.ARENA
         showMatches()
     }
-    toogle_winrate.onchange = {
-        resultAsWinRate = toogle_winrate.hasClass("is-checked")
+    UI.toogle_winrate.onchange = {
+        resultAsWinRate = UI.toogle_winrate.hasClass("is-checked")
         showMatches()
     }
 }
@@ -187,34 +176,16 @@ private fun showMatches() {
                 var totalClassWins = 0
                 var totalClassLosses = 0
                 DeckClass.values().forEach { opponentCls ->
-                    appendChild(createElement("th").apply {
-                        setAttribute("style", "text-align: center;")
-                        val vsMatches = matchesByClass?.get(playerCls)?.get(opponentCls)
-                                ?.filter { it.mode == currentMode }
-                                ?.filter { currentSeason == null || it.season == currentSeason?.id }
-                        val wins = vsMatches?.count { it.win } ?: 0
-                        val loses = vsMatches?.count { !it.win } ?: 0
-                        totalClassWins += wins
-                        totalClassLosses += loses
-                        val matches = wins + loses
-                        val winRate = 100 * wins / matches
-                        if (resultAsWinRate) {
-                            textContent = "$winRate%".takeIf { matches > 0 } ?: "-"
-                        } else {
-                            textContent = "$wins/$loses".takeIf { matches > 0 } ?: "-"
-                        }
-                    })
+                    val classMatches = matchesByClass?.get(playerCls)?.get(opponentCls)
+                            ?.filter { it.mode == currentMode }
+                            ?.filter { currentSeason == null || it.season == currentSeason?.id }
+                    val wins = classMatches?.count { it.win } ?: 0
+                    val loses = classMatches?.count { !it.win } ?: 0
+                    totalClassWins += wins
+                    totalClassLosses += loses
+                    appendChild(UI.createMatchResult(wins, loses))
                 }
-                appendChild(createElement("th").apply {
-                    setAttribute("style", "text-align: center;")
-                    val totalClassMatches = totalClassWins + totalClassLosses
-                    val winRate = 100 * totalClassWins / totalClassMatches
-                    if (resultAsWinRate) {
-                        textContent = "$winRate%".takeIf { totalClassMatches > 0 } ?: "-"
-                    } else {
-                        textContent = "$totalClassWins/$totalClassLosses".takeIf { totalClassMatches > 0 } ?: "-"
-                    }
-                })
+                appendChild(UI.createMatchResult(totalClassWins, totalClassLosses))
                 totalWins += totalClassWins
                 totalLosses += totalClassLosses
             }
@@ -227,90 +198,15 @@ private fun showMatches() {
             }
             val matchesByOpponent = userMatches?.groupBy { it.opponent.cls }
             DeckClass.values().forEach { opponentCls ->
-                appendChild(createElement("th").apply {
-                    setAttribute("style", "text-align: center;")
-                    val vsMatches = matchesByOpponent
-                            ?.get(opponentCls)
-                            ?.filter { it.mode == currentMode }
-                            ?.filter { currentSeason == null || it.season == currentSeason?.id }
-                    val wins = vsMatches?.count { it.win } ?: 0
-                    val loses = vsMatches?.count { !it.win } ?: 0
-                    val matches = wins + loses
-                    val winRate = 100 * wins / matches
-                    if (resultAsWinRate) {
-                        textContent = "$winRate%".takeIf { matches > 0 } ?: "-"
-                    } else {
-                        textContent = "$wins/$loses".takeIf { matches > 0 } ?: "-"
-                    }
-                })
+                val classMatches = matchesByOpponent
+                        ?.get(opponentCls)
+                        ?.filter { it.mode == currentMode }
+                        ?.filter { currentSeason == null || it.season == currentSeason?.id }
+                val wins = classMatches?.count { it.win } ?: 0
+                val loses = classMatches?.count { !it.win } ?: 0
+                appendChild(UI.createMatchResult(wins, loses))
             }
-            appendChild(createElement("th").apply {
-                setAttribute("style", "text-align: center;")
-                val totalMatches = totalWins + totalLosses
-                val winRate = 100 * totalWins / totalMatches
-                if (resultAsWinRate) {
-                    textContent = "$winRate%".takeIf { totalMatches > 0 } ?: "-"
-                } else {
-                    textContent = "$totalWins/$totalLosses".takeIf { totalMatches > 0 } ?: "-"
-                }
-            })
+            appendChild(UI.createMatchResult(totalWins, totalLosses))
         }
-    }
-}
-
-private fun buildStatisticsTable() {
-    with(document) {
-        DeckClass.values().forEach { cls ->
-            statistics_table_player.appendChild(
-                    createElement("tr").apply {
-                        id = "player${cls.name}"
-                        appendChild(createElement("td").apply {
-                            addDeckClassIcons(cls)
-                        })
-                    }
-            )
-            statistics_table_opponent.appendChild(
-                    createElement("th").apply {
-                        addDeckClassIcons(cls)
-                    }
-            )
-        }
-        statistics_table_opponent.appendChild(
-                createElement("th").apply {
-                    textContent = "Total"
-                }
-        )
-        statistics_table_player.appendChild(
-                createElement("tr").apply {
-                    id = "playerTotal"
-                    appendChild(createElement("td").apply {
-                        textContent = "Total"
-                    })
-                }
-        )
-    }
-}
-
-fun buildSeasonFilter(seasons: List<Season>) {
-    dropdown_seasons.appendChild(createSeasonItem(null))
-    seasons.forEach { season ->
-        dropdown_seasons.appendChild(createSeasonItem(season))
-    }
-}
-
-@Suppress("UnsafeCastFromDynamic")
-private fun createSeasonItem(season: Season?): HTMLElement {
-    return (document.createElement("li") as HTMLElement).apply {
-        addClass("mdl-menu__item mdl-js-ripple-effect")
-        textContent = season?.let { "${it.year} ${it.month}" } ?: "All Seasons"
-        onclick = {
-            currentSeason = season
-            js("$('.mdl-menu__container')").removeClass("is-visible")
-            showMatches()
-        }
-        appendChild(document.createElement("span").apply {
-            addClass("mdl-ripple")
-        })
-        js("componentHandler").upgradeElement(this)
     }
 }
