@@ -21,12 +21,6 @@ import kotlin.js.json
 
 val TESLEGENDS_DB_URL = "https://tes-legends-assistant.firebaseio.com"
 
-var userID: String? = null
-var userMatches: Map<DeckClass, Map<DeckClass, List<Match>>>? = null
-var matchesMode: MatchMode = MatchMode.RANKED
-var matchesResultAsWinRate = false
-var currentSeason: Season? = null
-
 val radio_ranked by lazy { document.getElementById("statistics-ranked") as HTMLLabelElement }
 val radio_casual by lazy { document.getElementById("statistics-casual") as HTMLLabelElement }
 val radio_arena by lazy { document.getElementById("statistics-arena") as HTMLLabelElement }
@@ -34,38 +28,48 @@ val toogle_winrate by lazy { document.getElementById("statistics-winrate") as HT
 val dropdown_seasons by lazy { document.getElementById("statistics-seasons") as HTMLUListElement }
 val dropdown_seasons_label by lazy { document.getElementById("statistics-seasons-label") as HTMLSpanElement }
 
+var userID: String? = null
+var userMatches: List<Match>? = null
+
+var currentMode: MatchMode = MatchMode.RANKED
+var currentSeason: Season? = null
+    set(value) {
+        field = value
+        dropdown_seasons_label.textContent = value?.let { "${it.year} ${it.month}" } ?: "All Seasons"
+    }
+var resultAsWinRate = false
+
 fun Main() {
     userID = URL(document.URL).searchParams.get("id")
     buildStatisticsTable()
     configureListeners()
-    getUserMatches { matches ->
-        userMatches = matches
-                .groupBy { it.player.cls }
-                .mapValues {
-                    it.value.groupBy { it.opponent.cls }
-                }
-        showMatches()
-    }
     getSeasons { seasons ->
         buildSeasonFilter(seasons)
+        if (seasons.isNotEmpty()) {
+            currentSeason = seasons[0]
+        }
+    }
+    getUserMatches { matches ->
+        userMatches = matches.sortedByDescending { it.uuid }
+        showMatches()
     }
 }
 
 private fun configureListeners() {
     radio_ranked.onchange = {
-        matchesMode = MatchMode.RANKED
+        currentMode = MatchMode.RANKED
         showMatches()
     }
     radio_casual.onchange = {
-        matchesMode = MatchMode.CASUAL
+        currentMode = MatchMode.CASUAL
         showMatches()
     }
     radio_arena.onchange = {
-        matchesMode = MatchMode.ARENA
+        currentMode = MatchMode.ARENA
         showMatches()
     }
     toogle_winrate.onchange = {
-        matchesResultAsWinRate = toogle_winrate.hasClass("is-checked")
+        resultAsWinRate = toogle_winrate.hasClass("is-checked")
         showMatches()
     }
 }
@@ -102,6 +106,72 @@ private fun getSeasons(onSuccess: (List<Season>) -> Unit) {
 
 private fun showMatches() {
     with(document) {
+        // History
+        getElementById("history-list")?.apply {
+            removeAllChilds()
+            userMatches?.filter { it.mode == currentMode }
+                    ?.filter { currentSeason == null || it.season == currentSeason?.id }
+                    ?.forEach { match ->
+                        appendChild(createElement("tr").apply {
+                            appendChild(createElement("th").apply {
+                                setAttribute("style", "text-align: center;")
+                                appendChild(createElement("img".takeIf { match.first } ?: "div").apply {
+                                    addClass("wt-history-first")
+                                    if (match.first) {
+                                        setAttribute("src", "images/ic_first.png")
+                                    }
+                                })
+                            })
+                            appendChild(createElement("th").apply {
+                                setAttribute("style", "text-align: center;")
+                                addDeckClassIcons(match.player.cls)
+                                appendChild(createElement("span").apply {
+                                    addClass("wt-history-vs")
+                                    textContent = "vs"
+                                })
+                                addDeckClassIcons(match.opponent.cls)
+                            })
+                            appendChild(createElement("th").apply {
+                                setAttribute("style", "text-align: center;")
+                                appendChild(createElement("img".takeIf { match.legend } ?: "div").apply {
+                                    addClass("wt-history-legend")
+                                    if (match.legend) {
+                                        setAttribute("src", "images/ic_legend.png")
+                                    }
+                                })
+                            })
+                            appendChild(createElement("th").apply {
+                                setAttribute("style", "text-align: center;")
+                                appendChild(createElement("span").apply {
+                                    addClass("wt-history-rank")
+                                    if (match.rank > 0) {
+                                        textContent = "${match.rank}"
+                                    }
+                                })
+                            })
+                            appendChild(createElement("th").apply {
+                                setAttribute("style", "text-align: center;")
+                                appendChild(createElement("span").apply {
+                                    addClass("wt-history-win".takeIf { match.win } ?: "wt-history-loss")
+                                    textContent = "Win".takeIf { match.win } ?: "Loss"
+                                })
+                            })
+                            appendChild(createElement("th").apply {
+                                setAttribute("style", "text-align: center;")
+                                appendChild(createElement("span").apply {
+                                    addClass("wt-history-time")
+                                    textContent = match.uuid.substringBeforeLast("T").replace("-", "/")
+                                })
+                            })
+                        })
+                    }
+        }
+        // Statistics
+        val matchesByClass = userMatches
+                ?.groupBy { it.player.cls }
+                ?.mapValues {
+                    it.value.groupBy { it.opponent.cls }
+                }
         DeckClass.values().forEach { playerCls ->
             getElementById("player${playerCls.name}")?.apply {
                 while (childElementCount > 1) {
@@ -112,14 +182,14 @@ private fun showMatches() {
                 DeckClass.values().forEach { opponentCls ->
                     appendChild(createElement("th").apply {
                         setAttribute("style", "text-align: center;")
-                        val vsMatches = userMatches?.get(playerCls)?.get(opponentCls)?.
-                                filter { it.mode == matchesMode }?.
-                                filter { currentSeason == null || it.season == currentSeason?.id }
+                        val vsMatches = matchesByClass?.get(playerCls)?.get(opponentCls)
+                                ?.filter { it.mode == currentMode }
+                                ?.filter { currentSeason == null || it.season == currentSeason?.id }
                         val wins = vsMatches?.count { it.win } ?: 0
                         val loses = vsMatches?.count { !it.win } ?: 0
                         val matches = wins + loses
                         val winRate = 100 / matches * wins
-                        if (matchesResultAsWinRate) {
+                        if (resultAsWinRate) {
                             textContent = "$winRate%".takeIf { matches > 0 } ?: "-"
                         } else {
                             textContent = "$wins/$loses".takeIf { matches > 0 } ?: "-"
@@ -138,7 +208,6 @@ private fun buildStatisticsTable() {
                     createElement("tr").apply {
                         id = "player${cls.name}"
                         appendChild(createElement("td").apply {
-                            addClass("mdl-data-table__cell--non-numeric")
                             addDeckClassIcons(cls)
                         })
                     }
@@ -166,7 +235,6 @@ private fun createSeasonItem(season: Season?): HTMLElement {
         textContent = season?.let { "${it.year} ${it.month}" } ?: "All Seasons"
         onclick = {
             currentSeason = season
-            dropdown_seasons_label.textContent = textContent
             js("$('.mdl-menu__container')").removeClass("is-visible")
             showMatches()
         }

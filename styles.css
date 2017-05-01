@@ -37,15 +37,18 @@ html, body {
 }
 .wt-main {
     margin-top: -36vh;
+    margin-bottom: 50px;
     -webkit-flex-shrink: 0;
     -ms-flex-negativ
 }
 .wt-container {
     max-width: 1600px;
-    width: calc(100% - 16px);
+    width: calc(100% - 160px);
     margin: 0 auto;
     padding-top: 0px;
 }
+
+/* Filters */
 .wt-statistics-mode {
     margin-top: 3px;
     margin-right: 4%;
@@ -71,6 +74,45 @@ html, body {
     margin-bottom: 5px;
     margin-right: 5%;
 }
+
+/* History */
+.wt-history {
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 2px;
+}
+.wt-history-item {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.wt-history-time {
+    margin-right: 10px;
+}
+.wt-history-first {
+    height: 16px;
+    width: 16px;
+    margin-right: 10px;
+}
+.wt-history-vs {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.wt-history-legend {
+    height: 16px;
+    width: 16px;
+}
+.wt-history-rank {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.wt-history-win {
+    color: green;
+}
+.wt-history-loss {
+    color: red;
+}
+
+/* Statistics */
 .wt-table {
     margin: 0 auto;
     margin-top: 30px;
@@ -81,4 +123,5 @@ html, body {
 .wt-attr {
     height: 15px;
     width: 15px;
+    margin-right: 3px;
 }

@@ -15,11 +15,18 @@ fun Element.addDeckClassIcons(cls: DeckClass) {
         addClass("wt-attr")
         setAttribute("src", "images/Attribute/${cls.attr1.name.toLowerCase().capitalize()}.png")
     })
-    appendText(" ")
     appendChild(document.createElement("img").apply {
         addClass("wt-attr")
         setAttribute("src", "images/Attribute/${cls.attr2.name.toLowerCase().capitalize()}.png")
     })
+}
+
+fun Element.removeAllChilds(){
+    while (childElementCount > 0) {
+        lastChild?.let {
+            removeChild(it)
+        }
+    }
 }
 
 fun Json.getString(key: String) = get(key).toString()

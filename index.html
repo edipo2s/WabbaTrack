@@ -69,59 +69,78 @@
 
         <!-- Tabs -->
         <div class="wt-tabs mdl-layout__tab-bar mdl-js-ripple-effect">
-            <a href="#statistics" class="mdl-layout__tab is-active">Statistics</a>
-            <a href="#history" class="mdl-layout__tab">History</a>
+            <a href="#history" class="mdl-layout__tab is-active">History</a>
+            <a href="#statistics" class="mdl-layout__tab">Statistics</a>
         </div>
     </header>
 
     <div class="wt-ribbon"></div>
 
     <main class="wt-main mdl-layout__content content">
-        <div class="mdl-layout__tab-panel is-active" id="statistics">
-            <div class="wt-container mdl-grid">
 
-                <div class="mdl-layout-spacer"></div>
-                <div class="wt-statistics-mode">
-                    <label id="statistics-ranked" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
-                        <input type="radio" id="option-1" class="mdl-radio__button" name="options" value="1" checked>
-                        <span class="mdl-radio__label">Ranked</span>
-                    </label>
-                    <label id="statistics-casual" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
-                        <input type="radio" id="option-2" class="mdl-radio__button" name="options" value="1">
-                        <span class="mdl-radio__label">Casual</span>
-                    </label>
-                    <label id="statistics-arena" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-3">
-                        <input type="radio" id="option-3" class="mdl-radio__button" name="options" value="3">
-                        <span class="mdl-radio__label">Arena</span>
-                    </label>
-                </div>
-                <label id="statistics-winrate"
-                       class="wt-statistics-winrate mdl-switch mdl-js-switch mdl-js-ripple-effect"
-                       for="switch-2">
-                    <input type="checkbox" id="switch-2" class="mdl-switch__input">
-                    <span class="mdl-switch__label">Win Rate</span>
+        <div class="wt-container mdl-grid">
+
+            <div class="mdl-layout-spacer"></div>
+            <div class="wt-statistics-mode">
+                <label id="statistics-ranked" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
+                    <input type="radio" id="option-1" class="mdl-radio__button" name="options" value="1" checked>
+                    <span class="mdl-radio__label">Ranked</span>
                 </label>
-                <div class="wt-statistics-dropdown">
-                    <span id="statistics-seasons-label">All Seasons</span>
-                    <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-                        <i class="material-icons" role="presentation">arrow_drop_down</i>
-                    </button>
-                    <ul id="statistics-seasons" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                        for="accbtn"></ul>
-                </div>
+                <label id="statistics-casual" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
+                    <input type="radio" id="option-2" class="mdl-radio__button" name="options" value="1">
+                    <span class="mdl-radio__label">Casual</span>
+                </label>
+                <label id="statistics-arena" class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-3">
+                    <input type="radio" id="option-3" class="mdl-radio__button" name="options" value="3">
+                    <span class="mdl-radio__label">Arena</span>
+                </label>
+            </div>
+            <label id="statistics-winrate"
+                   class="wt-statistics-winrate mdl-switch mdl-js-switch mdl-js-ripple-effect"
+                   for="switch-2">
+                <input type="checkbox" id="switch-2" class="mdl-switch__input">
+                <span class="mdl-switch__label">Win Rate</span>
+            </label>
+            <div class="wt-statistics-dropdown">
+                <span id="statistics-seasons-label">All Seasons</span>
+                <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                    <i class="material-icons" role="presentation">arrow_drop_down</i>
+                </button>
+                <ul id="statistics-seasons" class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                    for="accbtn"></ul>
+            </div>
 
+        </div>
+        <div class="wt-container">
+
+            <div class="mdl-layout__tab-panel is-active" id="history">
+                <table class="wt-history mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center;">First</th>
+                        <th style="text-align: center;">Vs</th>
+                        <th style="text-align: center;">Legend</th>
+                        <th style="text-align: center;">Rank</th>
+                        <th style="text-align: center;">Result</th>
+                        <th style="text-align: center;">Date</th>
+                    </tr>
+                    </thead>
+                    <tbody id="history-list">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mdl-layout__tab-panel" id="statistics">
                 <table class="wt-table mdl-data-table mdl-js-data-table mdl-shadow--2dp">
                     <thead>
                     <tr id="statistics-opponent-cls">
-                        <th class="mdl-data-table__cell--non-numeric" style="text-align: center;">Vs</th>
+                        <th style="text-align: center;">Vs</th>
                     </tr>
                     </thead>
                     <tbody id="statistics-player-cls">
                     </tbody>
                 </table>
-            </div>
-        </div>
-        <div class="mdl-layout__tab-panel" id="history">
+
         </div>
 
     </main>
