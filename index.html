@@ -61,25 +61,26 @@
 <body class="mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
 <div class="wabbatrack-layout mdl-layout mdl-js-layout">
 
-    <header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100  mdl-color-text--grey-800">
+    <header id="header"
+            class="mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100  mdl-color-text--grey-800">
 
         <!-- header -->
         <div class="mdl-layout__header-row">
             <span class="mdl-layout-title">WabbaTrack</span>
         </div>
 
-        <!-- Tabs -->
-        <div class="wt-tabs mdl-layout__tab-bar mdl-js-ripple-effect">
-            <a href="#history" class="mdl-layout__tab is-active">History</a>
-            <a href="#statistics" class="mdl-layout__tab">Statistics</a>
-        </div>
     </header>
 
     <div class="wt-ribbon"></div>
 
     <main class="wt-main mdl-layout__content content">
 
-        <div class="wt-container mdl-grid">
+        <div class="wt-container-noid">
+            <div class="wt-noid mdl-card">
+
+            </div>
+        </div>
+        <div class="wt-container mdl-grid hidden">
 
             <div class="mdl-layout-spacer"></div>
             <div class="wt-statistics-mode">
@@ -106,7 +107,7 @@
             </div>
 
         </div>
-        <div class="wt-container">
+        <div class="wt-container hidden">
 
             <div class="mdl-layout__tab-panel is-active" id="history">
                 <table class="wt-history mdl-data-table mdl-js-data-table mdl-shadow--2dp">

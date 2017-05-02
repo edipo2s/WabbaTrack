@@ -47,6 +47,19 @@ html, body {
     margin: 0 auto;
     padding-top: 0px;
 }
+.wt-container-noid {
+    max-width: 1600px;
+    width: calc(100% - 230px);
+    margin: 0 auto;
+    padding-top: 0px;
+}
+
+/* No-ID */
+.wt-noid {
+    margin: 0 auto;
+    margin-top: 15vh;
+    border-radius: 2px;
+}
 
 /* Filters */
 .wt-statistics-mode {
@@ -131,7 +144,7 @@ html, body {
 .wt-statistics th {
     padding: 12px;
 }
-.mdl-data-table th:first-of-type {
+.wt-statistics .mdl-data-table th:first-of-type {
     padding-left: 12px;
 }
 .wt-attr {

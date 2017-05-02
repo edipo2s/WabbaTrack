@@ -5,12 +5,14 @@ import com.ediposouza.model.DeckClass
 import org.w3c.dom.*
 import kotlin.browser.document
 import kotlin.dom.addClass
+import kotlin.dom.removeClass
 
 /**
  * Created by EdipoSouza on 5/1/17.
  */
 object UI {
 
+    val header by lazy { document.getElementById("header") as HTMLElement }
     val statistics_table_player by lazy { document.getElementById("statistics-player-cls") as HTMLElement }
     val statistics_table_opponent by lazy { document.getElementById("statistics-opponent-cls") as HTMLElement }
 
@@ -20,6 +22,40 @@ object UI {
     val toogle_winrate by lazy { document.getElementById("statistics-winrate") as HTMLLabelElement }
     val dropdown_seasons by lazy { document.getElementById("statistics-seasons") as HTMLUListElement }
     val dropdown_seasons_label by lazy { document.getElementById("statistics-seasons-label") as HTMLSpanElement }
+
+    fun addTabs() {
+        with(document) {
+            header.apply {
+                appendChild(createElement("div").apply {
+                    addClass("wt-tabs mdl-layout__tab-bar mdl-js-ripple-effect")
+                    appendChild(createElement("a").apply {
+                        addClass("mdl-layout__tab is-active")
+                        setAttribute("href", "#history")
+                        textContent = "History"
+                    })
+                    appendChild(createElement("a").apply {
+                        addClass("mdl-layout__tab")
+                        setAttribute("href", "#statistics")
+                        textContent = "Statistics"
+                    })
+                })
+            }
+        }
+    }
+
+    fun showUserContainers() {
+        with(document) {
+            getElementsByClassName("wt-container-noid").foreach {
+                it?.addClass("hidden")
+            }
+            getElementsByClassName("mdl-layout__tab-bar-container").foreach {
+                it?.removeClass("hidden")
+            }
+            getElementsByClassName("wt-container").foreach {
+                it?.removeClass("hidden")
+            }
+        }
+    }
 
     fun buildStatisticsTable() {
         with(document) {

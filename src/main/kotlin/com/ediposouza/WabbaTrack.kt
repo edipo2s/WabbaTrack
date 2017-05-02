@@ -29,21 +29,25 @@ var currentSeason: Season? = null
 var resultAsWinRate = false
 
 fun Main() {
-    userID = URL(document.URL).searchParams.get("id")
-    UI.buildStatisticsTable()
-    configureListeners()
-    getSeasons { seasons ->
-        if (seasons.isNotEmpty()) {
-            currentSeason = seasons[0]
+    if (URL(document.URL).searchParams.has("id")) {
+        userID = URL(document.URL).searchParams.get("id")
+        UI.addTabs()
+        UI.showUserContainers()
+        UI.buildStatisticsTable()
+        configureListeners()
+        getSeasons { seasons ->
+            if (seasons.isNotEmpty()) {
+                currentSeason = seasons[0]
+            }
+            UI.buildSeasonFilter(seasons) { season ->
+                currentSeason = season
+                showMatches()
+            }
         }
-        UI.buildSeasonFilter(seasons) { season ->
-            currentSeason = season
+        getUserMatches { matches ->
+            userMatches = matches.sortedByDescending { it.uuid }
             showMatches()
         }
-    }
-    getUserMatches { matches ->
-        userMatches = matches.sortedByDescending { it.uuid }
-        showMatches()
     }
 }
 

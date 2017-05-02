@@ -2,9 +2,9 @@ package com.ediposouza
 
 import com.ediposouza.model.DeckClass
 import org.w3c.dom.Element
+import org.w3c.dom.HTMLCollection
 import kotlin.browser.document
 import kotlin.dom.addClass
-import kotlin.dom.appendText
 import kotlin.js.Json
 
 /**
@@ -27,6 +27,10 @@ fun Element.removeAllChilds(){
             removeChild(it)
         }
     }
+}
+
+fun HTMLCollection.foreach(action: (Element?) -> Unit): Unit {
+    for (i in 0..length) action(item(i))
 }
 
 fun Json.getString(key: String) = get(key).toString()
