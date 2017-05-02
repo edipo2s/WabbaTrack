@@ -5,6 +5,7 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   'use strict';
   var addClass = Kotlin.kotlin.dom.addClass_hhb33f$;
   var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
+  var removeClass = Kotlin.kotlin.dom.removeClass_hhb33f$;
   var lazy = Kotlin.kotlin.lazy_klfg04$;
   var hasClass = Kotlin.kotlin.dom.hasClass_46n0ku$;
   var to = Kotlin.kotlin.to_ujzrz7$;
@@ -63,6 +64,12 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
       }
     }
   }
+  function foreach($receiver, action) {
+    var tmp$;
+    tmp$ = $receiver.length;
+    for (var i = 0; i <= tmp$; i++)
+      action($receiver.item(i));
+  }
   function getString($receiver, key) {
     return Kotlin.toString($receiver[key]);
   }
@@ -77,6 +84,7 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   }
   function UI() {
     UI_instance = this;
+    this.header$delegate = lazy(UI$header$lambda);
     this.statistics_table_player$delegate = lazy(UI$statistics_table_player$lambda);
     this.statistics_table_opponent$delegate = lazy(UI$statistics_table_opponent$lambda);
     this.radio_ranked$delegate = lazy(UI$radio_ranked$lambda);
@@ -86,6 +94,13 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     this.dropdown_seasons$delegate = lazy(UI$dropdown_seasons$lambda);
     this.dropdown_seasons_label$delegate = lazy(UI$dropdown_seasons_label$lambda);
   }
+  Object.defineProperty(UI.prototype, 'header', {
+    get: function () {
+      var $receiver = this.header$delegate;
+      new Kotlin.PropertyMetadata('header');
+      return $receiver.value;
+    }
+  });
   Object.defineProperty(UI.prototype, 'statistics_table_player', {
     get: function () {
       var $receiver = this.statistics_table_player$delegate;
@@ -142,6 +157,38 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
       return $receiver.value;
     }
   });
+  UI.prototype.addTabs = function () {
+    var $receiver = document;
+    var $receiver_0 = this.header;
+    var $receiver_1 = $receiver.createElement('div');
+    addClass($receiver_1, ['wt-tabs mdl-layout__tab-bar mdl-js-ripple-effect']);
+    var $receiver_2 = $receiver.createElement('a');
+    addClass($receiver_2, ['mdl-layout__tab is-active']);
+    $receiver_2.setAttribute('href', '#history');
+    $receiver_2.textContent = 'History';
+    $receiver_1.appendChild($receiver_2);
+    var $receiver_3 = $receiver.createElement('a');
+    addClass($receiver_3, ['mdl-layout__tab']);
+    $receiver_3.setAttribute('href', '#statistics');
+    $receiver_3.textContent = 'Statistics';
+    $receiver_1.appendChild($receiver_3);
+    $receiver_0.appendChild($receiver_1);
+  };
+  function UI$showUserContainers$lambda$lambda(it) {
+    it != null ? addClass(it, ['hidden']) : null;
+  }
+  function UI$showUserContainers$lambda$lambda_0(it) {
+    it != null ? removeClass(it, ['hidden']) : null;
+  }
+  function UI$showUserContainers$lambda$lambda_1(it) {
+    it != null ? removeClass(it, ['hidden']) : null;
+  }
+  UI.prototype.showUserContainers = function () {
+    var $receiver = document;
+    foreach($receiver.getElementsByClassName('wt-container-noid'), UI$showUserContainers$lambda$lambda);
+    foreach($receiver.getElementsByClassName('mdl-layout__tab-bar-container'), UI$showUserContainers$lambda$lambda_0);
+    foreach($receiver.getElementsByClassName('wt-container'), UI$showUserContainers$lambda$lambda_1);
+  };
   UI.prototype.buildStatisticsTable = function () {
     var $receiver = document;
     var $receiver_0 = DeckClass$values();
@@ -220,6 +267,10 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     }
     return $receiver;
   };
+  function UI$header$lambda() {
+    var tmp$;
+    return Kotlin.isType(tmp$ = document.getElementById('header'), HTMLElement) ? tmp$ : Kotlin.throwCCE();
+  }
   function UI$statistics_table_player$lambda() {
     var tmp$;
     return Kotlin.isType(tmp$ = document.getElementById('statistics-player-cls'), HTMLElement) ? tmp$ : Kotlin.throwCCE();
@@ -295,11 +346,15 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     showMatches();
   }
   function Main() {
-    userID = (new URL(document.URL)).searchParams.get('id');
-    UI_getInstance().buildStatisticsTable();
-    configureListeners();
-    getSeasons(Main$lambda);
-    getUserMatches(Main$lambda_0);
+    if ((new URL(document.URL)).searchParams.has('id')) {
+      userID = (new URL(document.URL)).searchParams.get('id');
+      UI_getInstance().addTabs();
+      UI_getInstance().showUserContainers();
+      UI_getInstance().buildStatisticsTable();
+      configureListeners();
+      getSeasons(Main$lambda);
+      getUserMatches(Main$lambda_0);
+    }
   }
   function configureListeners$lambda(it) {
     currentMode = MatchMode$RANKED_getInstance();
@@ -3446,6 +3501,7 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   var package$ediposouza = package$com.ediposouza || (package$com.ediposouza = {});
   package$ediposouza.addDeckClassIcons_ut8980$ = addDeckClassIcons;
   package$ediposouza.removeAllChilds_ejp6nk$ = removeAllChilds;
+  package$ediposouza.foreach_kskzji$ = foreach;
   package$ediposouza.getString_fxvzox$ = getString;
   package$ediposouza.getInt_fxvzox$ = getInt;
   package$ediposouza.getBoolean_fxvzox$ = getBoolean;
