@@ -57,8 +57,24 @@ html, body {
 /* No-ID */
 .wt-noid {
     margin: 0 auto;
-    margin-top: 15vh;
+    margin-top: 1vh;
     border-radius: 2px;
+}
+.wt-noid .mdl-card {
+    margin: 8px;
+    padding-left: 24px;
+    min-height: 140px;
+}
+.wt-description {
+    margin-left: 8px;
+}
+.wt-download {
+    position: absolute;
+    right: 28px;
+}
+.wt-foot {
+    margin: 8px;
+    text-align: right;
 }
 
 /* Filters */
