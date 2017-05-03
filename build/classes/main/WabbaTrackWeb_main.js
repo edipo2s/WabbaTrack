@@ -6,13 +6,13 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   var addClass = Kotlin.kotlin.dom.addClass_hhb33f$;
   var toInt = Kotlin.kotlin.text.toInt_pdl1vz$;
   var removeClass = Kotlin.kotlin.dom.removeClass_hhb33f$;
+  var substringBeforeLast = Kotlin.kotlin.text.substringBeforeLast_j4ogox$;
+  var replace = Kotlin.kotlin.text.replace_680rmw$;
   var lazy = Kotlin.kotlin.lazy_klfg04$;
   var hasClass = Kotlin.kotlin.dom.hasClass_46n0ku$;
   var to = Kotlin.kotlin.to_ujzrz7$;
   var json = Kotlin.kotlin.js.json_pyyo18$;
   var toList = Kotlin.kotlin.collections.toList_us0mfu$;
-  var substringBeforeLast = Kotlin.kotlin.text.substringBeforeLast_j4ogox$;
-  var replace = Kotlin.kotlin.text.replace_680rmw$;
   var Enum = Kotlin.kotlin.Enum;
   var substringBefore = Kotlin.kotlin.text.substringBefore_j4ogox$;
   var substringAfter = Kotlin.kotlin.text.substringAfter_j4ogox$;
@@ -188,6 +188,65 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     foreach($receiver.getElementsByClassName('wt-container-noid'), UI$showUserContainers$lambda$lambda);
     foreach($receiver.getElementsByClassName('mdl-layout__tab-bar-container'), UI$showUserContainers$lambda$lambda_0);
     foreach($receiver.getElementsByClassName('wt-container'), UI$showUserContainers$lambda$lambda_1);
+  };
+  UI.prototype.createHistoryMatchItem_c6hkol$ = function (match) {
+    var $receiver = document;
+    var $receiver_0 = $receiver.createElement('tr');
+    var $receiver_1 = $receiver.createElement('th');
+    var tmp$;
+    $receiver_1.setAttribute('style', 'text-align: center;');
+    var $receiver_2 = $receiver.createElement((tmp$ = match.first ? 'img' : null) != null ? tmp$ : 'div');
+    addClass($receiver_2, ['wt-history-first']);
+    if (match.first) {
+      $receiver_2.setAttribute('src', 'images/ic_first.png');
+    }
+    $receiver_1.appendChild($receiver_2);
+    $receiver_0.appendChild($receiver_1);
+    var $receiver_3 = $receiver.createElement('th');
+    $receiver_3.setAttribute('style', 'text-align: center;');
+    addDeckClassIcons($receiver_3, match.player.cls);
+    var $receiver_4 = $receiver.createElement('span');
+    addClass($receiver_4, ['wt-history-vs']);
+    $receiver_4.textContent = 'vs';
+    $receiver_3.appendChild($receiver_4);
+    addDeckClassIcons($receiver_3, match.opponent.cls);
+    $receiver_0.appendChild($receiver_3);
+    var $receiver_5 = $receiver.createElement('th');
+    var tmp$_0;
+    $receiver_5.setAttribute('style', 'text-align: center;');
+    var $receiver_6 = $receiver.createElement((tmp$_0 = match.legend ? 'img' : null) != null ? tmp$_0 : 'div');
+    addClass($receiver_6, ['wt-history-legend']);
+    if (match.legend) {
+      $receiver_6.setAttribute('src', 'images/ic_legend.png');
+    }
+    $receiver_5.appendChild($receiver_6);
+    $receiver_0.appendChild($receiver_5);
+    var $receiver_7 = $receiver.createElement('th');
+    $receiver_7.setAttribute('style', 'text-align: center;');
+    var $receiver_8 = $receiver.createElement('span');
+    addClass($receiver_8, ['wt-history-rank']);
+    if (match.rank > 0) {
+      $receiver_8.textContent = match.rank.toString();
+    }
+    $receiver_7.appendChild($receiver_8);
+    $receiver_0.appendChild($receiver_7);
+    var $receiver_9 = $receiver.createElement('th');
+    $receiver_9.setAttribute('style', 'text-align: center;');
+    var $receiver_10 = $receiver.createElement('span');
+    var tmp$_1, tmp$_2;
+    var $receiver_11 = 'wt-history-win';
+    addClass($receiver_10, [(tmp$_1 = match.win ? $receiver_11 : null) != null ? tmp$_1 : 'wt-history-loss']);
+    $receiver_10.textContent = (tmp$_2 = match.win ? 'Win' : null) != null ? tmp$_2 : 'Loss';
+    $receiver_9.appendChild($receiver_10);
+    $receiver_0.appendChild($receiver_9);
+    var $receiver_12 = $receiver.createElement('th');
+    $receiver_12.setAttribute('style', 'text-align: center;');
+    var $receiver_13 = $receiver.createElement('span');
+    addClass($receiver_13, ['wt-history-time']);
+    $receiver_13.textContent = replace(substringBeforeLast(match.uuid, 'T'), '-', '/');
+    $receiver_12.appendChild($receiver_13);
+    $receiver_0.appendChild($receiver_12);
+    return $receiver_0;
   };
   UI.prototype.buildStatisticsTable = function () {
     var $receiver = document;
@@ -540,324 +599,269 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
         tmp$_9 = tmp$_3.iterator();
         while (tmp$_9.hasNext()) {
           var element_1 = tmp$_9.next();
-          var $receiver_1 = $receiver.createElement('tr');
-          var $receiver_2 = $receiver.createElement('th');
-          var tmp$_10;
-          $receiver_2.setAttribute('style', 'text-align: center;');
-          var $receiver_3 = $receiver.createElement((tmp$_10 = element_1.first ? 'img' : null) != null ? tmp$_10 : 'div');
-          addClass($receiver_3, ['wt-history-first']);
-          if (element_1.first) {
-            $receiver_3.setAttribute('src', 'images/ic_first.png');
-          }
-          $receiver_2.appendChild($receiver_3);
-          $receiver_1.appendChild($receiver_2);
-          var $receiver_4 = $receiver.createElement('th');
-          $receiver_4.setAttribute('style', 'text-align: center;');
-          addDeckClassIcons($receiver_4, element_1.player.cls);
-          var $receiver_5 = $receiver.createElement('span');
-          addClass($receiver_5, ['wt-history-vs']);
-          $receiver_5.textContent = 'vs';
-          $receiver_4.appendChild($receiver_5);
-          addDeckClassIcons($receiver_4, element_1.opponent.cls);
-          $receiver_1.appendChild($receiver_4);
-          var $receiver_6 = $receiver.createElement('th');
-          var tmp$_11;
-          $receiver_6.setAttribute('style', 'text-align: center;');
-          var $receiver_7 = $receiver.createElement((tmp$_11 = element_1.legend ? 'img' : null) != null ? tmp$_11 : 'div');
-          addClass($receiver_7, ['wt-history-legend']);
-          if (element_1.legend) {
-            $receiver_7.setAttribute('src', 'images/ic_legend.png');
-          }
-          $receiver_6.appendChild($receiver_7);
-          $receiver_1.appendChild($receiver_6);
-          var $receiver_8 = $receiver.createElement('th');
-          $receiver_8.setAttribute('style', 'text-align: center;');
-          var $receiver_9 = $receiver.createElement('span');
-          addClass($receiver_9, ['wt-history-rank']);
-          if (element_1.rank > 0) {
-            $receiver_9.textContent = element_1.rank.toString();
-          }
-          $receiver_8.appendChild($receiver_9);
-          $receiver_1.appendChild($receiver_8);
-          var $receiver_10 = $receiver.createElement('th');
-          $receiver_10.setAttribute('style', 'text-align: center;');
-          var $receiver_11 = $receiver.createElement('span');
-          var tmp$_12, tmp$_13;
-          var $receiver_12 = 'wt-history-win';
-          addClass($receiver_11, [(tmp$_12 = element_1.win ? $receiver_12 : null) != null ? tmp$_12 : 'wt-history-loss']);
-          $receiver_11.textContent = (tmp$_13 = element_1.win ? 'Win' : null) != null ? tmp$_13 : 'Loss';
-          $receiver_10.appendChild($receiver_11);
-          $receiver_1.appendChild($receiver_10);
-          var $receiver_13 = $receiver.createElement('th');
-          $receiver_13.setAttribute('style', 'text-align: center;');
-          var $receiver_14 = $receiver.createElement('span');
-          addClass($receiver_14, ['wt-history-time']);
-          $receiver_14.textContent = replace(substringBeforeLast(element_1.uuid, 'T'), '-', '/');
-          $receiver_13.appendChild($receiver_14);
-          $receiver_1.appendChild($receiver_13);
-          tmp$.appendChild($receiver_1);
+          tmp$.appendChild(UI_getInstance().createHistoryMatchItem_c6hkol$(element_1));
         }
       }
     }
     var totalWins = {v: 0};
     var totalLosses = {v: 0};
-    var tmp$_14;
+    var tmp$_10;
     if (userMatches != null) {
-      var $receiver_15 = userMatches;
+      var $receiver_1 = userMatches;
       var destination_1 = Kotlin.kotlin.collections.LinkedHashMap_init_q3lmfv$();
-      var tmp$_15;
-      tmp$_15 = $receiver_15.iterator();
-      while (tmp$_15.hasNext()) {
-        var element_2 = tmp$_15.next();
+      var tmp$_11;
+      tmp$_11 = $receiver_1.iterator();
+      while (tmp$_11.hasNext()) {
+        var element_2 = tmp$_11.next();
         var key = element_2.player.cls;
-        var tmp$_16;
+        var tmp$_12;
         var value = destination_1.get_11rb$(key);
         if (value == null) {
           var answer = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
           destination_1.put_xwzc9p$(key, answer);
-          tmp$_16 = answer;
+          tmp$_12 = answer;
         }
          else {
-          tmp$_16 = value;
+          tmp$_12 = value;
         }
-        var list = tmp$_16;
+        var list = tmp$_12;
         list.add_11rb$(element_2);
       }
-      tmp$_14 = destination_1;
+      tmp$_10 = destination_1;
     }
      else
-      tmp$_14 = null;
-    var tmp$_17;
-    if ((tmp$_0 = tmp$_14) != null) {
+      tmp$_10 = null;
+    var tmp$_13;
+    if ((tmp$_0 = tmp$_10) != null) {
       var destination_2 = Kotlin.kotlin.collections.LinkedHashMap_init_xf5xz2$(Kotlin.kotlin.collections.mapCapacity_za3lpa$(tmp$_0.size));
-      var tmp$_18;
-      tmp$_18 = tmp$_0.entries.iterator();
-      while (tmp$_18.hasNext()) {
-        var element_3 = tmp$_18.next();
-        var tmp$_19 = destination_2.put_xwzc9p$;
-        var tmp$_20 = element_3.key;
-        var $receiver_16 = element_3.value;
+      var tmp$_14;
+      tmp$_14 = tmp$_0.entries.iterator();
+      while (tmp$_14.hasNext()) {
+        var element_3 = tmp$_14.next();
+        var tmp$_15 = destination_2.put_xwzc9p$;
+        var tmp$_16 = element_3.key;
+        var $receiver_2 = element_3.value;
         var destination_3 = Kotlin.kotlin.collections.LinkedHashMap_init_q3lmfv$();
-        var tmp$_21;
-        tmp$_21 = $receiver_16.iterator();
-        while (tmp$_21.hasNext()) {
-          var element_4 = tmp$_21.next();
+        var tmp$_17;
+        tmp$_17 = $receiver_2.iterator();
+        while (tmp$_17.hasNext()) {
+          var element_4 = tmp$_17.next();
           var key_0 = element_4.opponent.cls;
-          var tmp$_22;
+          var tmp$_18;
           var value_0 = destination_3.get_11rb$(key_0);
           if (value_0 == null) {
             var answer_0 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
             destination_3.put_xwzc9p$(key_0, answer_0);
-            tmp$_22 = answer_0;
+            tmp$_18 = answer_0;
           }
            else {
-            tmp$_22 = value_0;
+            tmp$_18 = value_0;
           }
-          var list_0 = tmp$_22;
+          var list_0 = tmp$_18;
           list_0.add_11rb$(element_4);
         }
-        tmp$_19.call(destination_2, tmp$_20, destination_3);
+        tmp$_15.call(destination_2, tmp$_16, destination_3);
       }
-      tmp$_17 = destination_2;
+      tmp$_13 = destination_2;
     }
      else
-      tmp$_17 = null;
-    var matchesByClass = tmp$_17;
-    var $receiver_17 = DeckClass$values();
-    var tmp$_23;
-    for (tmp$_23 = 0; tmp$_23 !== $receiver_17.length; ++tmp$_23) {
-      var element_5 = $receiver_17[tmp$_23];
-      var tmp$_24;
-      if ((tmp$_24 = $receiver.getElementById('player' + element_5.name)) != null) {
-        var tmp$_25;
-        while (tmp$_24.childElementCount > 1) {
-          if ((tmp$_25 = tmp$_24.lastChild) != null) {
-            tmp$_24.removeChild(tmp$_25);
+      tmp$_13 = null;
+    var matchesByClass = tmp$_13;
+    var $receiver_3 = DeckClass$values();
+    var tmp$_19;
+    for (tmp$_19 = 0; tmp$_19 !== $receiver_3.length; ++tmp$_19) {
+      var element_5 = $receiver_3[tmp$_19];
+      var tmp$_20;
+      if ((tmp$_20 = $receiver.getElementById('player' + element_5.name)) != null) {
+        var tmp$_21;
+        while (tmp$_20.childElementCount > 1) {
+          if ((tmp$_21 = tmp$_20.lastChild) != null) {
+            tmp$_20.removeChild(tmp$_21);
           }
         }
         var totalClassWins = {v: 0};
         var totalClassLosses = {v: 0};
-        var $receiver_18 = DeckClass$values();
-        var tmp$_26;
-        for (tmp$_26 = 0; tmp$_26 !== $receiver_18.length; ++tmp$_26) {
-          var element_6 = $receiver_18[tmp$_26];
-          var tmp$_27, tmp$_28, tmp$_29, tmp$_30, tmp$_31;
-          var tmp$_32;
-          if ((tmp$_28 = (tmp$_27 = matchesByClass != null ? matchesByClass.get_11rb$(element_5) : null) != null ? tmp$_27.get_11rb$(element_6) : null) != null) {
+        var $receiver_4 = DeckClass$values();
+        var tmp$_22;
+        for (tmp$_22 = 0; tmp$_22 !== $receiver_4.length; ++tmp$_22) {
+          var element_6 = $receiver_4[tmp$_22];
+          var tmp$_23, tmp$_24, tmp$_25, tmp$_26, tmp$_27;
+          var tmp$_28;
+          if ((tmp$_24 = (tmp$_23 = matchesByClass != null ? matchesByClass.get_11rb$(element_5) : null) != null ? tmp$_23.get_11rb$(element_6) : null) != null) {
             var destination_4 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
-            var tmp$_33;
-            tmp$_33 = tmp$_28.iterator();
-            while (tmp$_33.hasNext()) {
-              var element_7 = tmp$_33.next();
+            var tmp$_29;
+            tmp$_29 = tmp$_24.iterator();
+            while (tmp$_29.hasNext()) {
+              var element_7 = tmp$_29.next();
               if (element_7.mode === currentMode) {
                 destination_4.add_11rb$(element_7);
               }
             }
-            tmp$_32 = destination_4;
+            tmp$_28 = destination_4;
           }
            else
-            tmp$_32 = null;
-          var tmp$_34;
-          if ((tmp$_29 = tmp$_32) != null) {
+            tmp$_28 = null;
+          var tmp$_30;
+          if ((tmp$_25 = tmp$_28) != null) {
             var destination_5 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
-            var tmp$_35;
-            tmp$_35 = tmp$_29.iterator();
-            while (tmp$_35.hasNext()) {
-              var element_8 = tmp$_35.next();
-              var tmp$_36;
-              if (get_currentSeason() == null || Kotlin.equals(element_8.season, (tmp$_36 = get_currentSeason()) != null ? tmp$_36.id : null)) {
+            var tmp$_31;
+            tmp$_31 = tmp$_25.iterator();
+            while (tmp$_31.hasNext()) {
+              var element_8 = tmp$_31.next();
+              var tmp$_32;
+              if (get_currentSeason() == null || Kotlin.equals(element_8.season, (tmp$_32 = get_currentSeason()) != null ? tmp$_32.id : null)) {
                 destination_5.add_11rb$(element_8);
               }
             }
-            tmp$_34 = destination_5;
+            tmp$_30 = destination_5;
           }
            else
-            tmp$_34 = null;
-          var classMatches = tmp$_34;
-          var tmp$_37;
+            tmp$_30 = null;
+          var classMatches = tmp$_30;
+          var tmp$_33;
           if (classMatches != null) {
-            var tmp$_38;
+            var tmp$_34;
             var count_26 = 0;
-            tmp$_38 = classMatches.iterator();
-            while (tmp$_38.hasNext()) {
-              var element_9 = tmp$_38.next();
+            tmp$_34 = classMatches.iterator();
+            while (tmp$_34.hasNext()) {
+              var element_9 = tmp$_34.next();
               if (element_9.win) {
                 count_26 = count_26 + 1 | 0;
               }
             }
-            tmp$_37 = count_26;
+            tmp$_33 = count_26;
           }
            else
-            tmp$_37 = null;
-          var wins = (tmp$_30 = tmp$_37) != null ? tmp$_30 : 0;
-          var tmp$_39;
+            tmp$_33 = null;
+          var wins = (tmp$_26 = tmp$_33) != null ? tmp$_26 : 0;
+          var tmp$_35;
           if (classMatches != null) {
-            var tmp$_40;
+            var tmp$_36;
             var count_27 = 0;
-            tmp$_40 = classMatches.iterator();
-            while (tmp$_40.hasNext()) {
-              var element_10 = tmp$_40.next();
+            tmp$_36 = classMatches.iterator();
+            while (tmp$_36.hasNext()) {
+              var element_10 = tmp$_36.next();
               if (!element_10.win) {
                 count_27 = count_27 + 1 | 0;
               }
             }
-            tmp$_39 = count_27;
+            tmp$_35 = count_27;
           }
            else
-            tmp$_39 = null;
-          var loses = (tmp$_31 = tmp$_39) != null ? tmp$_31 : 0;
+            tmp$_35 = null;
+          var loses = (tmp$_27 = tmp$_35) != null ? tmp$_27 : 0;
           totalClassWins.v = totalClassWins.v + wins | 0;
           totalClassLosses.v = totalClassLosses.v + loses | 0;
-          tmp$_24.appendChild(UI_getInstance().createMatchResult_vux9f0$(wins, loses));
+          tmp$_20.appendChild(UI_getInstance().createMatchResult_vux9f0$(wins, loses));
         }
-        tmp$_24.appendChild(UI_getInstance().createMatchResult_vux9f0$(totalClassWins.v, totalClassLosses.v));
+        tmp$_20.appendChild(UI_getInstance().createMatchResult_vux9f0$(totalClassWins.v, totalClassLosses.v));
         totalWins.v = totalWins.v + totalClassWins.v | 0;
         totalLosses.v = totalLosses.v + totalClassLosses.v | 0;
       }
     }
     if ((tmp$_1 = $receiver.getElementById('playerTotal')) != null) {
-      var tmp$_41;
+      var tmp$_37;
       while (tmp$_1.childElementCount > 1) {
-        if ((tmp$_41 = tmp$_1.lastChild) != null) {
-          tmp$_1.removeChild(tmp$_41);
+        if ((tmp$_37 = tmp$_1.lastChild) != null) {
+          tmp$_1.removeChild(tmp$_37);
         }
       }
-      var tmp$_42;
+      var tmp$_38;
       if (userMatches != null) {
-        var $receiver_19 = userMatches;
+        var $receiver_5 = userMatches;
         var destination_6 = Kotlin.kotlin.collections.LinkedHashMap_init_q3lmfv$();
-        var tmp$_43;
-        tmp$_43 = $receiver_19.iterator();
-        while (tmp$_43.hasNext()) {
-          var element_11 = tmp$_43.next();
+        var tmp$_39;
+        tmp$_39 = $receiver_5.iterator();
+        while (tmp$_39.hasNext()) {
+          var element_11 = tmp$_39.next();
           var key_1 = element_11.opponent.cls;
-          var tmp$_44;
+          var tmp$_40;
           var value_1 = destination_6.get_11rb$(key_1);
           if (value_1 == null) {
             var answer_1 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
             destination_6.put_xwzc9p$(key_1, answer_1);
-            tmp$_44 = answer_1;
+            tmp$_40 = answer_1;
           }
            else {
-            tmp$_44 = value_1;
+            tmp$_40 = value_1;
           }
-          var list_1 = tmp$_44;
+          var list_1 = tmp$_40;
           list_1.add_11rb$(element_11);
         }
-        tmp$_42 = destination_6;
+        tmp$_38 = destination_6;
       }
        else
-        tmp$_42 = null;
-      var matchesByOpponent = tmp$_42;
-      var $receiver_20 = DeckClass$values();
-      var tmp$_45;
-      for (tmp$_45 = 0; tmp$_45 !== $receiver_20.length; ++tmp$_45) {
-        var element_12 = $receiver_20[tmp$_45];
-        var tmp$_46, tmp$_47, tmp$_48, tmp$_49;
-        var tmp$_50;
-        if ((tmp$_46 = matchesByOpponent != null ? matchesByOpponent.get_11rb$(element_12) : null) != null) {
+        tmp$_38 = null;
+      var matchesByOpponent = tmp$_38;
+      var $receiver_6 = DeckClass$values();
+      var tmp$_41;
+      for (tmp$_41 = 0; tmp$_41 !== $receiver_6.length; ++tmp$_41) {
+        var element_12 = $receiver_6[tmp$_41];
+        var tmp$_42, tmp$_43, tmp$_44, tmp$_45;
+        var tmp$_46;
+        if ((tmp$_42 = matchesByOpponent != null ? matchesByOpponent.get_11rb$(element_12) : null) != null) {
           var destination_7 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
-          var tmp$_51;
-          tmp$_51 = tmp$_46.iterator();
-          while (tmp$_51.hasNext()) {
-            var element_13 = tmp$_51.next();
+          var tmp$_47;
+          tmp$_47 = tmp$_42.iterator();
+          while (tmp$_47.hasNext()) {
+            var element_13 = tmp$_47.next();
             if (element_13.mode === currentMode) {
               destination_7.add_11rb$(element_13);
             }
           }
-          tmp$_50 = destination_7;
+          tmp$_46 = destination_7;
         }
          else
-          tmp$_50 = null;
-        var tmp$_52;
-        if ((tmp$_47 = tmp$_50) != null) {
+          tmp$_46 = null;
+        var tmp$_48;
+        if ((tmp$_43 = tmp$_46) != null) {
           var destination_8 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
-          var tmp$_53;
-          tmp$_53 = tmp$_47.iterator();
-          while (tmp$_53.hasNext()) {
-            var element_14 = tmp$_53.next();
-            var tmp$_54;
-            if (get_currentSeason() == null || Kotlin.equals(element_14.season, (tmp$_54 = get_currentSeason()) != null ? tmp$_54.id : null)) {
+          var tmp$_49;
+          tmp$_49 = tmp$_43.iterator();
+          while (tmp$_49.hasNext()) {
+            var element_14 = tmp$_49.next();
+            var tmp$_50;
+            if (get_currentSeason() == null || Kotlin.equals(element_14.season, (tmp$_50 = get_currentSeason()) != null ? tmp$_50.id : null)) {
               destination_8.add_11rb$(element_14);
             }
           }
-          tmp$_52 = destination_8;
+          tmp$_48 = destination_8;
         }
          else
-          tmp$_52 = null;
-        var classMatches_0 = tmp$_52;
-        var tmp$_55;
+          tmp$_48 = null;
+        var classMatches_0 = tmp$_48;
+        var tmp$_51;
         if (classMatches_0 != null) {
-          var tmp$_56;
+          var tmp$_52;
           var count_28 = 0;
-          tmp$_56 = classMatches_0.iterator();
-          while (tmp$_56.hasNext()) {
-            var element_15 = tmp$_56.next();
+          tmp$_52 = classMatches_0.iterator();
+          while (tmp$_52.hasNext()) {
+            var element_15 = tmp$_52.next();
             if (element_15.win) {
               count_28 = count_28 + 1 | 0;
             }
           }
-          tmp$_55 = count_28;
+          tmp$_51 = count_28;
         }
          else
-          tmp$_55 = null;
-        var wins_0 = (tmp$_48 = tmp$_55) != null ? tmp$_48 : 0;
-        var tmp$_57;
+          tmp$_51 = null;
+        var wins_0 = (tmp$_44 = tmp$_51) != null ? tmp$_44 : 0;
+        var tmp$_53;
         if (classMatches_0 != null) {
-          var tmp$_58;
+          var tmp$_54;
           var count_29 = 0;
-          tmp$_58 = classMatches_0.iterator();
-          while (tmp$_58.hasNext()) {
-            var element_16 = tmp$_58.next();
+          tmp$_54 = classMatches_0.iterator();
+          while (tmp$_54.hasNext()) {
+            var element_16 = tmp$_54.next();
             if (!element_16.win) {
               count_29 = count_29 + 1 | 0;
             }
           }
-          tmp$_57 = count_29;
+          tmp$_53 = count_29;
         }
          else
-          tmp$_57 = null;
-        var loses_0 = (tmp$_49 = tmp$_57) != null ? tmp$_49 : 0;
+          tmp$_53 = null;
+        var loses_0 = (tmp$_45 = tmp$_53) != null ? tmp$_45 : 0;
         tmp$_1.appendChild(UI_getInstance().createMatchResult_vux9f0$(wins_0, loses_0));
       }
       tmp$_1.appendChild(UI_getInstance().createMatchResult_vux9f0$(totalWins.v, totalLosses.v));

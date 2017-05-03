@@ -1,5 +1,6 @@
 package com.ediposouza
 
+import com.ediposouza.data.Match
 import com.ediposouza.data.Season
 import com.ediposouza.model.DeckClass
 import org.w3c.dom.*
@@ -53,6 +54,63 @@ object UI {
             }
             getElementsByClassName("wt-container").foreach {
                 it?.removeClass("hidden")
+            }
+        }
+    }
+
+    fun createHistoryMatchItem(match: Match): Element {
+        with(document) {
+            return createElement("tr").apply {
+                appendChild(createElement("th").apply {
+                    setAttribute("style", "text-align: center;")
+                    appendChild(createElement("img".takeIf { match.first } ?: "div").apply {
+                        addClass("wt-history-first")
+                        if (match.first) {
+                            setAttribute("src", "images/ic_first.png")
+                        }
+                    })
+                })
+                appendChild(createElement("th").apply {
+                    setAttribute("style", "text-align: center;")
+                    addDeckClassIcons(match.player.cls)
+                    appendChild(createElement("span").apply {
+                        addClass("wt-history-vs")
+                        textContent = "vs"
+                    })
+                    addDeckClassIcons(match.opponent.cls)
+                })
+                appendChild(createElement("th").apply {
+                    setAttribute("style", "text-align: center;")
+                    appendChild(createElement("img".takeIf { match.legend } ?: "div").apply {
+                        addClass("wt-history-legend")
+                        if (match.legend) {
+                            setAttribute("src", "images/ic_legend.png")
+                        }
+                    })
+                })
+                appendChild(createElement("th").apply {
+                    setAttribute("style", "text-align: center;")
+                    appendChild(createElement("span").apply {
+                        addClass("wt-history-rank")
+                        if (match.rank > 0) {
+                            textContent = "${match.rank}"
+                        }
+                    })
+                })
+                appendChild(createElement("th").apply {
+                    setAttribute("style", "text-align: center;")
+                    appendChild(createElement("span").apply {
+                        addClass("wt-history-win".takeIf { match.win } ?: "wt-history-loss")
+                        textContent = "Win".takeIf { match.win } ?: "Loss"
+                    })
+                })
+                appendChild(createElement("th").apply {
+                    setAttribute("style", "text-align: center;")
+                    appendChild(createElement("span").apply {
+                        addClass("wt-history-time")
+                        textContent = match.uuid.substringBeforeLast("T").replace("-", "/")
+                    })
+                })
             }
         }
     }
