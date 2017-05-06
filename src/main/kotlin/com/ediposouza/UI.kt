@@ -2,6 +2,7 @@ package com.ediposouza
 
 import com.ediposouza.data.Match
 import com.ediposouza.data.Season
+import com.ediposouza.data.User
 import com.ediposouza.model.DeckClass
 import org.w3c.dom.*
 import kotlin.browser.document
@@ -14,6 +15,9 @@ import kotlin.dom.removeClass
 object UI {
 
     val header by lazy { document.getElementById("header") as HTMLElement }
+    val user_name by lazy { document.getElementById("user-name") as HTMLElement }
+    val user_avatar by lazy { document.getElementById("user-avatar") as HTMLElement }
+    val user_photo by lazy { document.getElementById("user-photo") as HTMLElement }
     val statistics_table_player by lazy { document.getElementById("statistics-player-cls") as HTMLElement }
     val statistics_table_opponent by lazy { document.getElementById("statistics-opponent-cls") as HTMLElement }
 
@@ -41,6 +45,16 @@ object UI {
                     })
                 })
             }
+        }
+    }
+
+    fun showUserInfo(user: User) {
+        user_name.textContent = user.name
+        user_name.removeClass("hidden")
+        if (user.photoUrl.isNotEmpty()) {
+            user_avatar.addClass("hidden")
+            user_photo.removeClass("hidden")
+            user_photo.setAttribute("src", user.photoUrl)
         }
     }
 

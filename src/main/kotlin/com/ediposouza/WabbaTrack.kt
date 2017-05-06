@@ -3,6 +3,7 @@ package com.ediposouza
 import com.ediposouza.data.Match
 import com.ediposouza.data.MatchMode
 import com.ediposouza.data.Season
+import com.ediposouza.data.User
 import com.ediposouza.model.DeckClass
 import org.w3c.dom.url.URL
 import org.w3c.fetch.RequestCredentials
@@ -34,6 +35,9 @@ fun Main() {
         UI.showUserContainers()
         UI.buildStatisticsTable()
         configureListeners()
+        getUserInfo { user ->
+            UI.showUserInfo(user)
+        }
         getSeasons { seasons ->
             if (seasons.isNotEmpty()) {
                 currentSeason = seasons[0]
@@ -67,6 +71,20 @@ private fun configureListeners() {
         resultAsWinRate = UI.toogle_winrate.hasClass("is-checked")
         showMatches()
     }
+}
+
+@Suppress("UnsafeCastFromDynamic", "UNCHECKED_CAST_TO_NATIVE_INTERFACE")
+private fun getUserInfo(onSuccess: (User) -> Unit) {
+    window.fetch("$TESLEGENDS_DB_URL/users/$userID/info.json", object : RequestInit {
+        override var method: String? = "GET"
+        override var credentials: RequestCredentials? = RequestCredentials.SAME_ORIGIN
+        override var headers: dynamic = json("Accept" to "application/json")
+
+    }).then({ response ->
+        response.json().then({ json ->
+            onSuccess(User.parse(json as Json))
+        })
+    })
 }
 
 @Suppress("UnsafeCastFromDynamic", "UNCHECKED_CAST_TO_NATIVE_INTERFACE")
