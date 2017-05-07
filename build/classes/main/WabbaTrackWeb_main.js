@@ -85,6 +85,9 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   function UI() {
     UI_instance = this;
     this.header$delegate = lazy(UI$header$lambda);
+    this.user_name$delegate = lazy(UI$user_name$lambda);
+    this.user_avatar$delegate = lazy(UI$user_avatar$lambda);
+    this.user_photo$delegate = lazy(UI$user_photo$lambda);
     this.statistics_table_player$delegate = lazy(UI$statistics_table_player$lambda);
     this.statistics_table_opponent$delegate = lazy(UI$statistics_table_opponent$lambda);
     this.radio_ranked$delegate = lazy(UI$radio_ranked$lambda);
@@ -98,6 +101,27 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     get: function () {
       var $receiver = this.header$delegate;
       new Kotlin.PropertyMetadata('header');
+      return $receiver.value;
+    }
+  });
+  Object.defineProperty(UI.prototype, 'user_name', {
+    get: function () {
+      var $receiver = this.user_name$delegate;
+      new Kotlin.PropertyMetadata('user_name');
+      return $receiver.value;
+    }
+  });
+  Object.defineProperty(UI.prototype, 'user_avatar', {
+    get: function () {
+      var $receiver = this.user_avatar$delegate;
+      new Kotlin.PropertyMetadata('user_avatar');
+      return $receiver.value;
+    }
+  });
+  Object.defineProperty(UI.prototype, 'user_photo', {
+    get: function () {
+      var $receiver = this.user_photo$delegate;
+      new Kotlin.PropertyMetadata('user_photo');
       return $receiver.value;
     }
   });
@@ -173,6 +197,15 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     $receiver_3.textContent = 'Statistics';
     $receiver_1.appendChild($receiver_3);
     $receiver_0.appendChild($receiver_1);
+  };
+  UI.prototype.showUserInfo_e4x1kr$ = function (user) {
+    this.user_name.textContent = user.name;
+    removeClass(this.user_name, ['hidden']);
+    if (user.photoUrl.length > 0) {
+      addClass(this.user_avatar, ['hidden']);
+      removeClass(this.user_photo, ['hidden']);
+      this.user_photo.setAttribute('src', user.photoUrl);
+    }
   };
   function UI$showUserContainers$lambda$lambda(it) {
     it != null ? addClass(it, ['hidden']) : null;
@@ -330,6 +363,18 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     var tmp$;
     return Kotlin.isType(tmp$ = document.getElementById('header'), HTMLElement) ? tmp$ : Kotlin.throwCCE();
   }
+  function UI$user_name$lambda() {
+    var tmp$;
+    return Kotlin.isType(tmp$ = document.getElementById('user-name'), HTMLElement) ? tmp$ : Kotlin.throwCCE();
+  }
+  function UI$user_avatar$lambda() {
+    var tmp$;
+    return Kotlin.isType(tmp$ = document.getElementById('user-avatar'), HTMLElement) ? tmp$ : Kotlin.throwCCE();
+  }
+  function UI$user_photo$lambda() {
+    var tmp$;
+    return Kotlin.isType(tmp$ = document.getElementById('user-photo'), HTMLElement) ? tmp$ : Kotlin.throwCCE();
+  }
   function UI$statistics_table_player$lambda() {
     var tmp$;
     return Kotlin.isType(tmp$ = document.getElementById('statistics-player-cls'), HTMLElement) ? tmp$ : Kotlin.throwCCE();
@@ -387,11 +432,14 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     UI_getInstance().updateSeasonLabel_xjqf0i$(value);
   }
   var resultAsWinRate;
+  function Main$lambda(user) {
+    UI_getInstance().showUserInfo_e4x1kr$(user);
+  }
   function Main$lambda$lambda(season) {
     set_currentSeason(season);
     showMatches();
   }
-  function Main$lambda(seasons) {
+  function Main$lambda_0(seasons) {
     if (!seasons.isEmpty()) {
       set_currentSeason(seasons.get_za3lpa$(0));
     }
@@ -400,7 +448,7 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   function Main$lambda$lambda_0(it) {
     return it.uuid;
   }
-  function Main$lambda_0(matches) {
+  function Main$lambda_1(matches) {
     userMatches = Kotlin.kotlin.collections.sortedWith_eknfly$(matches, new Kotlin.kotlin.comparisons.compareByDescending$f(Main$lambda$lambda_0));
     showMatches();
   }
@@ -411,8 +459,9 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
       UI_getInstance().showUserContainers();
       UI_getInstance().buildStatisticsTable();
       configureListeners();
-      getSeasons(Main$lambda);
-      getUserMatches(Main$lambda_0);
+      getUserInfo(Main$lambda);
+      getSeasons(Main$lambda_0);
+      getUserMatches(Main$lambda_1);
     }
   }
   function configureListeners$lambda(it) {
@@ -436,6 +485,53 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     UI_getInstance().radio_casual.onchange = configureListeners$lambda_0;
     UI_getInstance().radio_arena.onchange = configureListeners$lambda_1;
     UI_getInstance().toogle_winrate.onchange = configureListeners$lambda_2;
+  }
+  function getUserInfo$ObjectLiteral() {
+    this.method_scwsew$_0 = 'GET';
+    this.credentials_scwsew$_0 = 'same-origin';
+    this.headers_scwsew$_0 = json([to('Accept', 'application/json')]);
+  }
+  Object.defineProperty(getUserInfo$ObjectLiteral.prototype, 'method', {
+    get: function () {
+      return this.method_scwsew$_0;
+    },
+    set: function (method) {
+      this.method_scwsew$_0 = method;
+    }
+  });
+  Object.defineProperty(getUserInfo$ObjectLiteral.prototype, 'credentials', {
+    get: function () {
+      return this.credentials_scwsew$_0;
+    },
+    set: function (credentials) {
+      this.credentials_scwsew$_0 = credentials;
+    }
+  });
+  Object.defineProperty(getUserInfo$ObjectLiteral.prototype, 'headers', {
+    get: function () {
+      return this.headers_scwsew$_0;
+    },
+    set: function (headers) {
+      this.headers_scwsew$_0 = headers;
+    }
+  });
+  getUserInfo$ObjectLiteral.$metadata$ = {
+    kind: Kotlin.Kind.CLASS,
+    interfaces: []
+  };
+  function getUserInfo$lambda$lambda(closure$onSuccess) {
+    return function (json_0) {
+      var tmp$;
+      closure$onSuccess(User$Companion_getInstance().parse_qk3xy8$(Kotlin.isType(tmp$ = json_0, Object) ? tmp$ : Kotlin.throwCCE()));
+    };
+  }
+  function getUserInfo$lambda(closure$onSuccess) {
+    return function (response) {
+      return response.json().then(getUserInfo$lambda$lambda(closure$onSuccess));
+    };
+  }
+  function getUserInfo(onSuccess) {
+    window.fetch(TESLEGENDS_DB_URL + '/users/' + Kotlin.toString(userID) + '/info.json', new getUserInfo$ObjectLiteral()).then(getUserInfo$lambda(onSuccess));
   }
   function getUserMatches$ObjectLiteral() {
     this.method_5kbz6n$_0 = 'GET';
@@ -3183,6 +3279,55 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
   Match.prototype.equals = function (other) {
     return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.uuid, other.uuid) && Kotlin.equals(this.first, other.first) && Kotlin.equals(this.player, other.player) && Kotlin.equals(this.opponent, other.opponent) && Kotlin.equals(this.mode, other.mode) && Kotlin.equals(this.season, other.season) && Kotlin.equals(this.rank, other.rank) && Kotlin.equals(this.legend, other.legend) && Kotlin.equals(this.win, other.win)))));
   };
+  function User(name, photoUrl) {
+    User$Companion_getInstance();
+    this.name = name;
+    this.photoUrl = photoUrl;
+  }
+  function User$Companion() {
+    User$Companion_instance = this;
+  }
+  User$Companion.prototype.parse_qk3xy8$ = function (json_0) {
+    return new User(getString(json_0, 'name'), getString(json_0, 'photoUrl'));
+  };
+  User$Companion.$metadata$ = {
+    kind: Kotlin.Kind.OBJECT,
+    simpleName: 'Companion',
+    interfaces: []
+  };
+  var User$Companion_instance = null;
+  function User$Companion_getInstance() {
+    if (User$Companion_instance === null) {
+      new User$Companion();
+    }
+    return User$Companion_instance;
+  }
+  User.$metadata$ = {
+    kind: Kotlin.Kind.CLASS,
+    simpleName: 'User',
+    interfaces: []
+  };
+  User.prototype.component1 = function () {
+    return this.name;
+  };
+  User.prototype.component2 = function () {
+    return this.photoUrl;
+  };
+  User.prototype.copy_puj7f4$ = function (name, photoUrl) {
+    return new User(name === void 0 ? this.name : name, photoUrl === void 0 ? this.photoUrl : photoUrl);
+  };
+  User.prototype.toString = function () {
+    return 'User(name=' + Kotlin.toString(this.name) + (', photoUrl=' + Kotlin.toString(this.photoUrl)) + ')';
+  };
+  User.prototype.hashCode = function () {
+    var result = 0;
+    result = result * 31 + Kotlin.hashCode(this.name) | 0;
+    result = result * 31 + Kotlin.hashCode(this.photoUrl) | 0;
+    return result;
+  };
+  User.prototype.equals = function (other) {
+    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.name, other.name) && Kotlin.equals(this.photoUrl, other.photoUrl)))));
+  };
   function PatchType(name, ordinal) {
     PatchType$Companion_getInstance();
     Enum.call(this);
@@ -4018,6 +4163,10 @@ var WabbaTrackWeb_main = function (_, Kotlin) {
     get: Match$Companion_getInstance
   });
   package$data.Match = Match;
+  Object.defineProperty(User, 'Companion', {
+    get: User$Companion_getInstance
+  });
+  package$data.User = User;
   Object.defineProperty(PatchType, 'BALANCE', {
     get: PatchType$BALANCE_getInstance
   });
