@@ -49,7 +49,7 @@ html, body {
 }
 .wt-container-noid {
     max-width: 1600px;
-    width: calc(100% - 230px);
+    width: 90%;
     margin: 0 auto;
     padding-top: 0px;
 }
