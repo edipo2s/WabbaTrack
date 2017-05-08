@@ -65,7 +65,6 @@ html, body {
 }
 .wt-noid .mdl-card {
     margin: 8px;
-    padding-left: 24px;
     min-height: 140px;
 }
 .wt-description {
@@ -74,6 +73,33 @@ html, body {
 .wt-download {
     position: absolute;
     right: 28px;
+}
+.wt-feature {
+    display: table-cell;
+    text-align: center;
+}
+.wt-feature img {
+    float: left;
+}
+.wt-feature-arenatier div {
+    margin-left: 138px;
+    margin-right: 5px;
+}
+.wt-feature-arenatier ul {
+    text-align: left;
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+}
+.wt-feature-hover div {
+    margin-left: 414px;
+}
+.wt-feature-hover div img {
+    margin-top: 3px;
+    margin-left: 28px;
+}
+.wt-limitations {
+    padding-left: 24px;
 }
 .wt-foot {
     margin: 8px;
