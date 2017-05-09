@@ -73,6 +73,7 @@ html, body {
 .wt-download {
     position: absolute;
     right: 28px;
+    z-index: 999;
 }
 .wt-feature {
     display: table-cell;
