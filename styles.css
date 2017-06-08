@@ -109,6 +109,10 @@ html, body {
     margin: 8px;
     text-align: right;
 }
+.wt-center {
+    width: 50%;
+    margin: 0 auto;
+}
 
 /* Filters */
 .wt-statistics-mode {
